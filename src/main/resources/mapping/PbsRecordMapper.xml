@@ -1,0 +1,1045 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.easyfly.main.dao.PbsRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.easyfly.main.bean.PbsRecord" >
+    <id column="record_id" property="recordId" jdbcType="INTEGER" />
+    <result column="record_ky_no" property="recordKyNo" jdbcType="VARCHAR" />
+    <result column="record_jj_no" property="recordJjNo" jdbcType="VARCHAR" />
+    <result column="record_aj_no" property="recordAjNo" jdbcType="VARCHAR" />
+    <result column="record_no" property="recordNo" jdbcType="VARCHAR" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+    <result column="kyr_name" property="kyrName" jdbcType="VARCHAR" />
+    <result column="ky_unit_name" property="kyUnitName" jdbcType="VARCHAR" />
+    <result column="jjr_id" property="jjrId" jdbcType="VARCHAR" />
+    <result column="jjr_name" property="jjrName" jdbcType="VARCHAR" />
+    <result column="jj_unit_id" property="jjUnitId" jdbcType="VARCHAR" />
+    <result column="jj_unit_name" property="jjUnitName" jdbcType="VARCHAR" />
+    <result column="kyr_id" property="kyrId" jdbcType="VARCHAR" />
+    <result column="ky_unit_id" property="kyUnitId" jdbcType="VARCHAR" />
+    <result column="bgr_id" property="bgrId" jdbcType="VARCHAR" />
+    <result column="bgr_name" property="bgrName" jdbcType="VARCHAR" />
+    <result column="rec_title" property="recTitle" jdbcType="VARCHAR" />
+    <result column="rec_xz" property="recXz" jdbcType="VARCHAR" />
+    <result column="fsqy" property="fsqy" jdbcType="VARCHAR" />
+    <result column="xcwz" property="xcwz" jdbcType="VARCHAR" />
+    <result column="xczb" property="xczb" jdbcType="VARCHAR" />
+    <result column="rec_state" property="recState" jdbcType="INTEGER" />
+    <result column="xctq" property="xctq" jdbcType="VARCHAR" />
+    <result column="xcsd" property="xcsd" jdbcType="VARCHAR" />
+    <result column="xcwd" property="xcwd" jdbcType="VARCHAR" />
+    <result column="ky_date" property="kyDate" jdbcType="DATE" />
+    <result column="jj_time" property="jjTime" jdbcType="TIMESTAMP" />
+      <result column="af_time" property="afTime" jdbcType="TIMESTAMP" />
+    <result column="kyks_time" property="kyksTime" jdbcType="TIMESTAMP" />
+    <result column="kyjs_time" property="kyjsTime" jdbcType="TIMESTAMP" />
+    <result column="xcfx" property="xcfx" jdbcType="VARCHAR" />
+    <result column="xcgz" property="xcgz" jdbcType="VARCHAR" />
+    <result column="xczk" property="xczk" jdbcType="VARCHAR" />
+    <result column="bh_flag" property="bhFlag" jdbcType="INTEGER" />
+    <result column="bhr_id" property="bhrId" jdbcType="VARCHAR" />
+    <result column="bhr_name" property="bhrName" jdbcType="VARCHAR" />
+    <result column="bhr_unit_id" property="bhrUnitId" jdbcType="VARCHAR" />
+    <result column="bhr_unit_name" property="bhrUnitName" jdbcType="VARCHAR" />
+    <result column="bhr_zw" property="bhrZw" jdbcType="VARCHAR" />
+    <result column="bdyy" property="bdyy" jdbcType="VARCHAR" />
+    <result column="bhfs" property="bhfs" jdbcType="VARCHAR" />
+    <result column="xc_east" property="xcEast" jdbcType="VARCHAR" />
+    <result column="xc_west" property="xcWest" jdbcType="VARCHAR" />
+    <result column="xc_south" property="xcSouth" jdbcType="VARCHAR" />
+    <result column="xc_north" property="xcNorth" jdbcType="VARCHAR" />
+    <result column="jzr_name" property="jzrName" jdbcType="VARCHAR" />
+    <result column="jzr_sex" property="jzrSex" jdbcType="VARCHAR" />
+    <result column="jzr_birth" property="jzrBirth" jdbcType="VARCHAR" />
+    <result column="jzr_address" property="jzrAddress" jdbcType="VARCHAR" />
+    <result column="zhr_id" property="zhrId" jdbcType="VARCHAR" />
+    <result column="zhr_name" property="zhrName" jdbcType="VARCHAR" />
+    <result column="zhr_unit_id" property="zhrUnitId" jdbcType="VARCHAR" />
+    <result column="zhr_unit_name" property="zhrUnitName" jdbcType="VARCHAR" />
+    <result column="zhr_zw" property="zhrZw" jdbcType="VARCHAR" />
+    <result column="blr_name" property="blrName" jdbcType="VARCHAR" />
+    <result column="ztr_name" property="ztrName" jdbcType="VARCHAR" />
+    <result column="zxr_name" property="zxrName" jdbcType="VARCHAR" />
+    <result column="lxr_name" property="lxrName" jdbcType="VARCHAR" />
+    <result column="lyr_name" property="lyrName" jdbcType="VARCHAR" />
+    <result column="jjr_other" property="jjrOther" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="sh_unit_id" property="shUnitId" jdbcType="VARCHAR" />
+    <result column="sh_unit_name" property="shUnitName" jdbcType="VARCHAR" />
+    <result column="shyj" property="shyj" jdbcType="VARCHAR" />
+    <result column="model_id" property="modelId" jdbcType="INTEGER" />
+    <result column="doc_url" property="docUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.easyfly.main.bean.PbsRecordWithBLOBs" extends="BaseResultMap" >
+    <result column="kysy" property="kysy" jdbcType="LONGVARCHAR" />
+    <result column="xcms" property="xcms" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap id="ResultOfInteger" type="java.lang.Integer">
+    <result column="rowNum" property="rowNum" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    record_id, record_no, record_ky_no, record_jj_no, record_aj_no, uuid, kyr_name, ky_unit_name, jjr_id, jjr_name, jj_unit_id,
+    jj_unit_name, kyr_id, ky_unit_id, bgr_id, bgr_name, rec_title, rec_xz, fsqy, xcwz, 
+    xczb, rec_state, xctq, xcsd, xcwd, ky_date, jj_time, af_time, kyks_time, kyjs_time, xcfx,
+    xcgz, xczk, bh_flag, bhr_id, bhr_name, bhr_unit_id, bhr_unit_name, bhr_zw, bdyy, 
+    bhfs, xc_east, xc_west, xc_south, xc_north, jzr_name, jzr_sex, jzr_birth, jzr_address, 
+    zhr_id, zhr_name, zhr_unit_id, zhr_unit_name, zhr_zw, blr_name, ztr_name, zxr_name, 
+    lxr_name, lyr_name, jjr_other, create_time, update_time, sh_unit_id, sh_unit_name, 
+    shyj, model_id, doc_url
+  </sql>
+  <sql id="Blob_Column_List" >
+    kysy, xcms
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.easyfly.main.bean.PbsRecordExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pbs_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryCondition" resultMap="BaseResultMap" parameterType="com.easyfly.main.bean.RecordFilterBean" >
+    select
+    <include refid="Base_Column_List" />
+    from pbs_record
+    <where>
+      <if test="kyUnitName!=null">
+        <if test="!kyUnitName.equals('')">
+          <bind name="t_kyUnitName" value="'%' + kyUnitName + '%'" />
+          and ky_unit_name like #{t_kyUnitName,jdbcType=VARCHAR}
+        </if>
+      </if>
+      <if test="recState!=0">
+        and rec_state = #{recState,jdbcType=INTEGER}
+      </if>
+      <if test="kyrName!=null">
+        <if test="!kyrName.equals('')">
+          <bind name="t_kyrName" value="'%' + kyrName + '%'" />
+          and kyr_name like #{t_kyrName,jdbcType=VARCHAR}
+        </if>
+      </if>
+      <if test="kyDateBegin!=null">
+        and ky_date &gt;= #{kyDateBegin,jdbcType=DATE}
+      </if>
+      <if test="kyDateEnd!=null">
+        and ky_date &lt;= #{kyDateEnd,jdbcType=DATE}
+      </if>
+      <if test="recordNo!=null">
+        <if test="!recordNo.equals('')">
+          and record_no = #{recordNo,jdbcType=VARCHAR}
+        </if>
+      </if>
+      <if test="recordTitle!=null">
+        <if test="!recordTitle.equals('')">
+          <bind name="t_recordTitle" value="'%' + recordTitle + '%'" />
+          and rec_title like #{t_recordTitle,jdbcType=VARCHAR}
+        </if>
+      </if>
+    </where>
+    ORDER BY ky_date DESC
+    LIMIT  ${offset},${limit}
+  </select>
+  <select id="selectRowNumByCondition" resultMap="ResultOfInteger" parameterType="java.lang.Integer" >
+    SELECT COUNT(record_id) AS rowNum
+    FROM pbs_record
+    <where>
+      <if test="kyUnitName!=null">
+        <if test="!kyUnitName.equals('')">
+          <bind name="t_kyUnitName" value="'%' + kyUnitName + '%'" />
+          and ky_unit_name like #{t_kyUnitName,jdbcType=VARCHAR}
+        </if>
+      </if>
+      <if test="recState!=0">
+        and rec_state = #{recState,jdbcType=INTEGER}
+      </if>
+      <if test="kyrName!=null">
+        <if test="!kyrName.equals('')">
+          <bind name="t_kyrName" value="'%' + kyrName + '%'" />
+          and kyr_name like #{t_kyrName,jdbcType=VARCHAR}
+        </if>
+      </if>
+      <if test="kyDateBegin!=null">
+        and ky_date &gt;= #{kyDateBegin,jdbcType=DATE}
+      </if>
+      <if test="kyDateEnd!=null">
+        and ky_date &lt;= #{kyDateEnd,jdbcType=DATE}
+      </if>
+      <if test="recordNo!=null">
+        <if test="!recordNo.equals('')">
+          and record_no = #{recordNo,jdbcType=VARCHAR}
+        </if>
+      </if>
+      <if test="recordTitle!=null">
+        <if test="!recordTitle.equals('')">
+          <bind name="t_recordTitle" value="'%' + recordTitle + '%'" />
+          and rec_title like #{t_recordTitle,jdbcType=VARCHAR}
+        </if>
+      </if>
+    </where>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.easyfly.main.bean.PbsRecordExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from pbs_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pbs_record
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pbs_record
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.easyfly.main.bean.PbsRecordWithBLOBs" >
+    insert into pbs_record (record_id, record_no, uuid, 
+      kyr_name, ky_unit_name, jjr_id, 
+      jjr_name, jj_unit_id, jj_unit_name, 
+      kyr_id, ky_unit_id, bgr_id, 
+      bgr_name, rec_title, rec_xz, 
+      fsqy, xcwz, xczb, rec_state, 
+      xctq, xcsd, xcwd, ky_date, 
+      jj_time, kyks_time, kyjs_time, 
+      xcfx, xcgz, xczk, bh_flag, 
+      bhr_id, bhr_name, bhr_unit_id, 
+      bhr_unit_name, bhr_zw, bdyy, 
+      bhfs, xc_east, xc_west, 
+      xc_south, xc_north, jzr_name, 
+      jzr_sex, jzr_birth, jzr_address, 
+      zhr_id, zhr_name, zhr_unit_id, 
+      zhr_unit_name, zhr_zw, blr_name, 
+      ztr_name, zxr_name, lxr_name, 
+      lyr_name, jjr_other, create_time, 
+      update_time, sh_unit_id, sh_unit_name, 
+      shyj, model_id, doc_url, 
+      kysy, xcms)
+    values (#{recordId,jdbcType=INTEGER}, #{recordNo,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, 
+      #{kyrName,jdbcType=VARCHAR}, #{kyUnitName,jdbcType=VARCHAR}, #{jjrId,jdbcType=VARCHAR}, 
+      #{jjrName,jdbcType=VARCHAR}, #{jjUnitId,jdbcType=VARCHAR}, #{jjUnitName,jdbcType=VARCHAR}, 
+      #{kyrId,jdbcType=VARCHAR}, #{kyUnitId,jdbcType=VARCHAR}, #{bgrId,jdbcType=VARCHAR}, 
+      #{bgrName,jdbcType=VARCHAR}, #{recTitle,jdbcType=VARCHAR}, #{recXz,jdbcType=VARCHAR}, 
+      #{fsqy,jdbcType=VARCHAR}, #{xcwz,jdbcType=VARCHAR}, #{xczb,jdbcType=VARCHAR}, #{recState,jdbcType=INTEGER}, 
+      #{xctq,jdbcType=VARCHAR}, #{xcsd,jdbcType=VARCHAR}, #{xcwd,jdbcType=VARCHAR}, #{kyDate,jdbcType=DATE}, 
+      #{jjTime,jdbcType=TIMESTAMP}, #{kyksTime,jdbcType=TIMESTAMP}, #{kyjsTime,jdbcType=TIMESTAMP}, 
+      #{xcfx,jdbcType=VARCHAR}, #{xcgz,jdbcType=VARCHAR}, #{xczk,jdbcType=VARCHAR}, #{bhFlag,jdbcType=INTEGER}, 
+      #{bhrId,jdbcType=VARCHAR}, #{bhrName,jdbcType=VARCHAR}, #{bhrUnitId,jdbcType=VARCHAR}, 
+      #{bhrUnitName,jdbcType=VARCHAR}, #{bhrZw,jdbcType=VARCHAR}, #{bdyy,jdbcType=VARCHAR}, 
+      #{bhfs,jdbcType=VARCHAR}, #{xcEast,jdbcType=VARCHAR}, #{xcWest,jdbcType=VARCHAR}, 
+      #{xcSouth,jdbcType=VARCHAR}, #{xcNorth,jdbcType=VARCHAR}, #{jzrName,jdbcType=VARCHAR}, 
+      #{jzrSex,jdbcType=VARCHAR}, #{jzrBirth,jdbcType=VARCHAR}, #{jzrAddress,jdbcType=VARCHAR}, 
+      #{zhrId,jdbcType=VARCHAR}, #{zhrName,jdbcType=VARCHAR}, #{zhrUnitId,jdbcType=VARCHAR}, 
+      #{zhrUnitName,jdbcType=VARCHAR}, #{zhrZw,jdbcType=VARCHAR}, #{blrName,jdbcType=VARCHAR}, 
+      #{ztrName,jdbcType=VARCHAR}, #{zxrName,jdbcType=VARCHAR}, #{lxrName,jdbcType=VARCHAR}, 
+      #{lyrName,jdbcType=VARCHAR}, #{jjrOther,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{shUnitId,jdbcType=VARCHAR}, #{shUnitName,jdbcType=VARCHAR}, 
+      #{shyj,jdbcType=VARCHAR}, #{modelId,jdbcType=INTEGER}, #{docUrl,jdbcType=VARCHAR}, 
+      #{kysy,jdbcType=LONGVARCHAR}, #{xcms,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.easyfly.main.bean.PbsRecordWithBLOBs" useGeneratedKeys="true" keyProperty="recordId">
+    insert into pbs_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="recordNo != null" >
+        record_no,
+      </if>
+      <if test="uuid != null" >
+        uuid,
+      </if>
+      <if test="kyrName != null" >
+        kyr_name,
+      </if>
+      <if test="kyUnitName != null" >
+        ky_unit_name,
+      </if>
+      <if test="jjrId != null" >
+        jjr_id,
+      </if>
+      <if test="jjrName != null" >
+        jjr_name,
+      </if>
+      <if test="jjUnitId != null" >
+        jj_unit_id,
+      </if>
+      <if test="jjUnitName != null" >
+        jj_unit_name,
+      </if>
+      <if test="kyrId != null" >
+        kyr_id,
+      </if>
+      <if test="kyUnitId != null" >
+        ky_unit_id,
+      </if>
+      <if test="bgrId != null" >
+        bgr_id,
+      </if>
+      <if test="bgrName != null" >
+        bgr_name,
+      </if>
+      <if test="recTitle != null" >
+        rec_title,
+      </if>
+      <if test="recXz != null" >
+        rec_xz,
+      </if>
+      <if test="fsqy != null" >
+        fsqy,
+      </if>
+      <if test="xcwz != null" >
+        xcwz,
+      </if>
+      <if test="xczb != null" >
+        xczb,
+      </if>
+      <if test="recState != null" >
+        rec_state,
+      </if>
+      <if test="xctq != null" >
+        xctq,
+      </if>
+      <if test="xcsd != null" >
+        xcsd,
+      </if>
+      <if test="xcwd != null" >
+        xcwd,
+      </if>
+      <if test="kyDate != null" >
+        ky_date,
+      </if>
+      <if test="jjTime != null" >
+        jj_time,
+      </if>
+      <if test="kyksTime != null" >
+        kyks_time,
+      </if>
+      <if test="kyjsTime != null" >
+        kyjs_time,
+      </if>
+      <if test="xcfx != null" >
+        xcfx,
+      </if>
+      <if test="xcgz != null" >
+        xcgz,
+      </if>
+      <if test="xczk != null" >
+        xczk,
+      </if>
+      <if test="bhFlag != null" >
+        bh_flag,
+      </if>
+      <if test="bhrId != null" >
+        bhr_id,
+      </if>
+      <if test="bhrName != null" >
+        bhr_name,
+      </if>
+      <if test="bhrUnitId != null" >
+        bhr_unit_id,
+      </if>
+      <if test="bhrUnitName != null" >
+        bhr_unit_name,
+      </if>
+      <if test="bhrZw != null" >
+        bhr_zw,
+      </if>
+      <if test="bdyy != null" >
+        bdyy,
+      </if>
+      <if test="bhfs != null" >
+        bhfs,
+      </if>
+      <if test="xcEast != null" >
+        xc_east,
+      </if>
+      <if test="xcWest != null" >
+        xc_west,
+      </if>
+      <if test="xcSouth != null" >
+        xc_south,
+      </if>
+      <if test="xcNorth != null" >
+        xc_north,
+      </if>
+      <if test="jzrName != null" >
+        jzr_name,
+      </if>
+      <if test="jzrSex != null" >
+        jzr_sex,
+      </if>
+      <if test="jzrBirth != null" >
+        jzr_birth,
+      </if>
+      <if test="jzrAddress != null" >
+        jzr_address,
+      </if>
+      <if test="zhrId != null" >
+        zhr_id,
+      </if>
+      <if test="zhrName != null" >
+        zhr_name,
+      </if>
+      <if test="zhrUnitId != null" >
+        zhr_unit_id,
+      </if>
+      <if test="zhrUnitName != null" >
+        zhr_unit_name,
+      </if>
+      <if test="zhrZw != null" >
+        zhr_zw,
+      </if>
+      <if test="blrName != null" >
+        blr_name,
+      </if>
+      <if test="ztrName != null" >
+        ztr_name,
+      </if>
+      <if test="zxrName != null" >
+        zxr_name,
+      </if>
+      <if test="lxrName != null" >
+        lxr_name,
+      </if>
+      <if test="lyrName != null" >
+        lyr_name,
+      </if>
+      <if test="jjrOther != null" >
+        jjr_other,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="shUnitId != null" >
+        sh_unit_id,
+      </if>
+      <if test="shUnitName != null" >
+        sh_unit_name,
+      </if>
+      <if test="shyj != null" >
+        shyj,
+      </if>
+      <if test="modelId != null" >
+        model_id,
+      </if>
+      <if test="docUrl != null" >
+        doc_url,
+      </if>
+      <if test="kysy != null" >
+        kysy,
+      </if>
+      <if test="xcms != null" >
+        xcms,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="recordNo != null" >
+        #{recordNo,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="kyrName != null" >
+        #{kyrName,jdbcType=VARCHAR},
+      </if>
+      <if test="kyUnitName != null" >
+        #{kyUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="jjrId != null" >
+        #{jjrId,jdbcType=VARCHAR},
+      </if>
+      <if test="jjrName != null" >
+        #{jjrName,jdbcType=VARCHAR},
+      </if>
+      <if test="jjUnitId != null" >
+        #{jjUnitId,jdbcType=VARCHAR},
+      </if>
+      <if test="jjUnitName != null" >
+        #{jjUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="kyrId != null" >
+        #{kyrId,jdbcType=VARCHAR},
+      </if>
+      <if test="kyUnitId != null" >
+        #{kyUnitId,jdbcType=VARCHAR},
+      </if>
+      <if test="bgrId != null" >
+        #{bgrId,jdbcType=VARCHAR},
+      </if>
+      <if test="bgrName != null" >
+        #{bgrName,jdbcType=VARCHAR},
+      </if>
+      <if test="recTitle != null" >
+        #{recTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="recXz != null" >
+        #{recXz,jdbcType=VARCHAR},
+      </if>
+      <if test="fsqy != null" >
+        #{fsqy,jdbcType=VARCHAR},
+      </if>
+      <if test="xcwz != null" >
+        #{xcwz,jdbcType=VARCHAR},
+      </if>
+      <if test="xczb != null" >
+        #{xczb,jdbcType=VARCHAR},
+      </if>
+      <if test="recState != null" >
+        #{recState,jdbcType=INTEGER},
+      </if>
+      <if test="xctq != null" >
+        #{xctq,jdbcType=VARCHAR},
+      </if>
+      <if test="xcsd != null" >
+        #{xcsd,jdbcType=VARCHAR},
+      </if>
+      <if test="xcwd != null" >
+        #{xcwd,jdbcType=VARCHAR},
+      </if>
+      <if test="kyDate != null" >
+        #{kyDate,jdbcType=DATE},
+      </if>
+      <if test="jjTime != null" >
+        #{jjTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="kyksTime != null" >
+        #{kyksTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="kyjsTime != null" >
+        #{kyjsTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="xcfx != null" >
+        #{xcfx,jdbcType=VARCHAR},
+      </if>
+      <if test="xcgz != null" >
+        #{xcgz,jdbcType=VARCHAR},
+      </if>
+      <if test="xczk != null" >
+        #{xczk,jdbcType=VARCHAR},
+      </if>
+      <if test="bhFlag != null" >
+        #{bhFlag,jdbcType=INTEGER},
+      </if>
+      <if test="bhrId != null" >
+        #{bhrId,jdbcType=VARCHAR},
+      </if>
+      <if test="bhrName != null" >
+        #{bhrName,jdbcType=VARCHAR},
+      </if>
+      <if test="bhrUnitId != null" >
+        #{bhrUnitId,jdbcType=VARCHAR},
+      </if>
+      <if test="bhrUnitName != null" >
+        #{bhrUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="bhrZw != null" >
+        #{bhrZw,jdbcType=VARCHAR},
+      </if>
+      <if test="bdyy != null" >
+        #{bdyy,jdbcType=VARCHAR},
+      </if>
+      <if test="bhfs != null" >
+        #{bhfs,jdbcType=VARCHAR},
+      </if>
+      <if test="xcEast != null" >
+        #{xcEast,jdbcType=VARCHAR},
+      </if>
+      <if test="xcWest != null" >
+        #{xcWest,jdbcType=VARCHAR},
+      </if>
+      <if test="xcSouth != null" >
+        #{xcSouth,jdbcType=VARCHAR},
+      </if>
+      <if test="xcNorth != null" >
+        #{xcNorth,jdbcType=VARCHAR},
+      </if>
+      <if test="jzrName != null" >
+        #{jzrName,jdbcType=VARCHAR},
+      </if>
+      <if test="jzrSex != null" >
+        #{jzrSex,jdbcType=VARCHAR},
+      </if>
+      <if test="jzrBirth != null" >
+        #{jzrBirth,jdbcType=VARCHAR},
+      </if>
+      <if test="jzrAddress != null" >
+        #{jzrAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="zhrId != null" >
+        #{zhrId,jdbcType=VARCHAR},
+      </if>
+      <if test="zhrName != null" >
+        #{zhrName,jdbcType=VARCHAR},
+      </if>
+      <if test="zhrUnitId != null" >
+        #{zhrUnitId,jdbcType=VARCHAR},
+      </if>
+      <if test="zhrUnitName != null" >
+        #{zhrUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="zhrZw != null" >
+        #{zhrZw,jdbcType=VARCHAR},
+      </if>
+      <if test="blrName != null" >
+        #{blrName,jdbcType=VARCHAR},
+      </if>
+      <if test="ztrName != null" >
+        #{ztrName,jdbcType=VARCHAR},
+      </if>
+      <if test="zxrName != null" >
+        #{zxrName,jdbcType=VARCHAR},
+      </if>
+      <if test="lxrName != null" >
+        #{lxrName,jdbcType=VARCHAR},
+      </if>
+      <if test="lyrName != null" >
+        #{lyrName,jdbcType=VARCHAR},
+      </if>
+      <if test="jjrOther != null" >
+        #{jjrOther,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shUnitId != null" >
+        #{shUnitId,jdbcType=VARCHAR},
+      </if>
+      <if test="shUnitName != null" >
+        #{shUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="shyj != null" >
+        #{shyj,jdbcType=VARCHAR},
+      </if>
+      <if test="modelId != null" >
+        #{modelId,jdbcType=INTEGER},
+      </if>
+      <if test="docUrl != null" >
+        #{docUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="kysy != null" >
+        #{kysy,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="xcms != null" >
+        #{xcms,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.easyfly.main.bean.PbsRecordWithBLOBs" >
+    update pbs_record
+    <set >
+      <if test="recordNo != null" >
+        record_no = #{recordNo,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null" >
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="kyrName != null" >
+        kyr_name = #{kyrName,jdbcType=VARCHAR},
+      </if>
+      <if test="kyUnitName != null" >
+        ky_unit_name = #{kyUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="jjrId != null" >
+        jjr_id = #{jjrId,jdbcType=VARCHAR},
+      </if>
+      <if test="jjrName != null" >
+        jjr_name = #{jjrName,jdbcType=VARCHAR},
+      </if>
+      <if test="jjUnitId != null" >
+        jj_unit_id = #{jjUnitId,jdbcType=VARCHAR},
+      </if>
+      <if test="jjUnitName != null" >
+        jj_unit_name = #{jjUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="kyrId != null" >
+        kyr_id = #{kyrId,jdbcType=VARCHAR},
+      </if>
+      <if test="kyUnitId != null" >
+        ky_unit_id = #{kyUnitId,jdbcType=VARCHAR},
+      </if>
+      <if test="bgrId != null" >
+        bgr_id = #{bgrId,jdbcType=VARCHAR},
+      </if>
+      <if test="bgrName != null" >
+        bgr_name = #{bgrName,jdbcType=VARCHAR},
+      </if>
+      <if test="recTitle != null" >
+        rec_title = #{recTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="recXz != null" >
+        rec_xz = #{recXz,jdbcType=VARCHAR},
+      </if>
+      <if test="fsqy != null" >
+        fsqy = #{fsqy,jdbcType=VARCHAR},
+      </if>
+      <if test="xcwz != null" >
+        xcwz = #{xcwz,jdbcType=VARCHAR},
+      </if>
+      <if test="xczb != null" >
+        xczb = #{xczb,jdbcType=VARCHAR},
+      </if>
+      <if test="recState != null" >
+        rec_state = #{recState,jdbcType=INTEGER},
+      </if>
+      <if test="xctq != null" >
+        xctq = #{xctq,jdbcType=VARCHAR},
+      </if>
+      <if test="xcsd != null" >
+        xcsd = #{xcsd,jdbcType=VARCHAR},
+      </if>
+      <if test="xcwd != null" >
+        xcwd = #{xcwd,jdbcType=VARCHAR},
+      </if>
+      <if test="kyDate != null" >
+        ky_date = #{kyDate,jdbcType=DATE},
+      </if>
+      <if test="jjTime != null" >
+        jj_time = #{jjTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="kyksTime != null" >
+        kyks_time = #{kyksTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="kyjsTime != null" >
+        kyjs_time = #{kyjsTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="xcfx != null" >
+        xcfx = #{xcfx,jdbcType=VARCHAR},
+      </if>
+      <if test="xcgz != null" >
+        xcgz = #{xcgz,jdbcType=VARCHAR},
+      </if>
+      <if test="xczk != null" >
+        xczk = #{xczk,jdbcType=VARCHAR},
+      </if>
+      <if test="bhFlag != null" >
+        bh_flag = #{bhFlag,jdbcType=INTEGER},
+      </if>
+      <if test="bhrId != null" >
+        bhr_id = #{bhrId,jdbcType=VARCHAR},
+      </if>
+      <if test="bhrName != null" >
+        bhr_name = #{bhrName,jdbcType=VARCHAR},
+      </if>
+      <if test="bhrUnitId != null" >
+        bhr_unit_id = #{bhrUnitId,jdbcType=VARCHAR},
+      </if>
+      <if test="bhrUnitName != null" >
+        bhr_unit_name = #{bhrUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="bhrZw != null" >
+        bhr_zw = #{bhrZw,jdbcType=VARCHAR},
+      </if>
+      <if test="bdyy != null" >
+        bdyy = #{bdyy,jdbcType=VARCHAR},
+      </if>
+      <if test="bhfs != null" >
+        bhfs = #{bhfs,jdbcType=VARCHAR},
+      </if>
+      <if test="xcEast != null" >
+        xc_east = #{xcEast,jdbcType=VARCHAR},
+      </if>
+      <if test="xcWest != null" >
+        xc_west = #{xcWest,jdbcType=VARCHAR},
+      </if>
+      <if test="xcSouth != null" >
+        xc_south = #{xcSouth,jdbcType=VARCHAR},
+      </if>
+      <if test="xcNorth != null" >
+        xc_north = #{xcNorth,jdbcType=VARCHAR},
+      </if>
+      <if test="jzrName != null" >
+        jzr_name = #{jzrName,jdbcType=VARCHAR},
+      </if>
+      <if test="jzrSex != null" >
+        jzr_sex = #{jzrSex,jdbcType=VARCHAR},
+      </if>
+      <if test="jzrBirth != null" >
+        jzr_birth = #{jzrBirth,jdbcType=VARCHAR},
+      </if>
+      <if test="jzrAddress != null" >
+        jzr_address = #{jzrAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="zhrId != null" >
+        zhr_id = #{zhrId,jdbcType=VARCHAR},
+      </if>
+      <if test="zhrName != null" >
+        zhr_name = #{zhrName,jdbcType=VARCHAR},
+      </if>
+      <if test="zhrUnitId != null" >
+        zhr_unit_id = #{zhrUnitId,jdbcType=VARCHAR},
+      </if>
+      <if test="zhrUnitName != null" >
+        zhr_unit_name = #{zhrUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="zhrZw != null" >
+        zhr_zw = #{zhrZw,jdbcType=VARCHAR},
+      </if>
+      <if test="blrName != null" >
+        blr_name = #{blrName,jdbcType=VARCHAR},
+      </if>
+      <if test="ztrName != null" >
+        ztr_name = #{ztrName,jdbcType=VARCHAR},
+      </if>
+      <if test="zxrName != null" >
+        zxr_name = #{zxrName,jdbcType=VARCHAR},
+      </if>
+      <if test="lxrName != null" >
+        lxr_name = #{lxrName,jdbcType=VARCHAR},
+      </if>
+      <if test="lyrName != null" >
+        lyr_name = #{lyrName,jdbcType=VARCHAR},
+      </if>
+      <if test="jjrOther != null" >
+        jjr_other = #{jjrOther,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shUnitId != null" >
+        sh_unit_id = #{shUnitId,jdbcType=VARCHAR},
+      </if>
+      <if test="shUnitName != null" >
+        sh_unit_name = #{shUnitName,jdbcType=VARCHAR},
+      </if>
+      <if test="shyj != null" >
+        shyj = #{shyj,jdbcType=VARCHAR},
+      </if>
+      <if test="modelId != null" >
+        model_id = #{modelId,jdbcType=INTEGER},
+      </if>
+      <if test="docUrl != null" >
+        doc_url = #{docUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="kysy != null" >
+        kysy = #{kysy,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="xcms != null" >
+        xcms = #{xcms,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateRecordNo" parameterType="com.easyfly.main.bean.PbsRecordWithBLOBs" >
+    update pbs_record
+    <set >
+      <if test="recordNo != null" >
+        record_no = #{recordNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateCheckInfo" parameterType="com.easyfly.main.bean.PbsRecordWithBLOBs" >
+    update pbs_record
+    <set >
+      <if test="recState != null" >
+        rec_state = #{recState,jdbcType=INTEGER},
+      </if>
+      <if test="shyj != null" >
+        shyj = #{shyj,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateWordUrlInfo" parameterType="com.easyfly.main.bean.PbsRecordWithBLOBs" >
+    update pbs_record
+    <set >
+      <if test="recState != null" >
+        rec_state = #{recState,jdbcType=INTEGER},
+      </if>
+      <if test="docUrl != null" >
+        doc_url = #{docUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.easyfly.main.bean.PbsRecordWithBLOBs" >
+    update pbs_record
+    set record_no = #{recordNo,jdbcType=VARCHAR},
+      uuid = #{uuid,jdbcType=VARCHAR},
+      kyr_name = #{kyrName,jdbcType=VARCHAR},
+      ky_unit_name = #{kyUnitName,jdbcType=VARCHAR},
+      jjr_id = #{jjrId,jdbcType=VARCHAR},
+      jjr_name = #{jjrName,jdbcType=VARCHAR},
+      jj_unit_id = #{jjUnitId,jdbcType=VARCHAR},
+      jj_unit_name = #{jjUnitName,jdbcType=VARCHAR},
+      kyr_id = #{kyrId,jdbcType=VARCHAR},
+      ky_unit_id = #{kyUnitId,jdbcType=VARCHAR},
+      bgr_id = #{bgrId,jdbcType=VARCHAR},
+      bgr_name = #{bgrName,jdbcType=VARCHAR},
+      rec_title = #{recTitle,jdbcType=VARCHAR},
+      rec_xz = #{recXz,jdbcType=VARCHAR},
+      fsqy = #{fsqy,jdbcType=VARCHAR},
+      xcwz = #{xcwz,jdbcType=VARCHAR},
+      xczb = #{xczb,jdbcType=VARCHAR},
+      rec_state = #{recState,jdbcType=INTEGER},
+      xctq = #{xctq,jdbcType=VARCHAR},
+      xcsd = #{xcsd,jdbcType=VARCHAR},
+      xcwd = #{xcwd,jdbcType=VARCHAR},
+      ky_date = #{kyDate,jdbcType=DATE},
+      jj_time = #{jjTime,jdbcType=TIMESTAMP},
+      kyks_time = #{kyksTime,jdbcType=TIMESTAMP},
+      kyjs_time = #{kyjsTime,jdbcType=TIMESTAMP},
+      xcfx = #{xcfx,jdbcType=VARCHAR},
+      xcgz = #{xcgz,jdbcType=VARCHAR},
+      xczk = #{xczk,jdbcType=VARCHAR},
+      bh_flag = #{bhFlag,jdbcType=INTEGER},
+      bhr_id = #{bhrId,jdbcType=VARCHAR},
+      bhr_name = #{bhrName,jdbcType=VARCHAR},
+      bhr_unit_id = #{bhrUnitId,jdbcType=VARCHAR},
+      bhr_unit_name = #{bhrUnitName,jdbcType=VARCHAR},
+      bhr_zw = #{bhrZw,jdbcType=VARCHAR},
+      bdyy = #{bdyy,jdbcType=VARCHAR},
+      bhfs = #{bhfs,jdbcType=VARCHAR},
+      xc_east = #{xcEast,jdbcType=VARCHAR},
+      xc_west = #{xcWest,jdbcType=VARCHAR},
+      xc_south = #{xcSouth,jdbcType=VARCHAR},
+      xc_north = #{xcNorth,jdbcType=VARCHAR},
+      jzr_name = #{jzrName,jdbcType=VARCHAR},
+      jzr_sex = #{jzrSex,jdbcType=VARCHAR},
+      jzr_birth = #{jzrBirth,jdbcType=VARCHAR},
+      jzr_address = #{jzrAddress,jdbcType=VARCHAR},
+      zhr_id = #{zhrId,jdbcType=VARCHAR},
+      zhr_name = #{zhrName,jdbcType=VARCHAR},
+      zhr_unit_id = #{zhrUnitId,jdbcType=VARCHAR},
+      zhr_unit_name = #{zhrUnitName,jdbcType=VARCHAR},
+      zhr_zw = #{zhrZw,jdbcType=VARCHAR},
+      blr_name = #{blrName,jdbcType=VARCHAR},
+      ztr_name = #{ztrName,jdbcType=VARCHAR},
+      zxr_name = #{zxrName,jdbcType=VARCHAR},
+      lxr_name = #{lxrName,jdbcType=VARCHAR},
+      lyr_name = #{lyrName,jdbcType=VARCHAR},
+      jjr_other = #{jjrOther,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      sh_unit_id = #{shUnitId,jdbcType=VARCHAR},
+      sh_unit_name = #{shUnitName,jdbcType=VARCHAR},
+      shyj = #{shyj,jdbcType=VARCHAR},
+      model_id = #{modelId,jdbcType=INTEGER},
+      doc_url = #{docUrl,jdbcType=VARCHAR},
+      kysy = #{kysy,jdbcType=LONGVARCHAR},
+      xcms = #{xcms,jdbcType=LONGVARCHAR}
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.easyfly.main.bean.PbsRecord" >
+    update pbs_record
+    set record_no = #{recordNo,jdbcType=VARCHAR},
+      uuid = #{uuid,jdbcType=VARCHAR},
+      kyr_name = #{kyrName,jdbcType=VARCHAR},
+      ky_unit_name = #{kyUnitName,jdbcType=VARCHAR},
+      jjr_id = #{jjrId,jdbcType=VARCHAR},
+      jjr_name = #{jjrName,jdbcType=VARCHAR},
+      jj_unit_id = #{jjUnitId,jdbcType=VARCHAR},
+      jj_unit_name = #{jjUnitName,jdbcType=VARCHAR},
+      kyr_id = #{kyrId,jdbcType=VARCHAR},
+      ky_unit_id = #{kyUnitId,jdbcType=VARCHAR},
+      bgr_id = #{bgrId,jdbcType=VARCHAR},
+      bgr_name = #{bgrName,jdbcType=VARCHAR},
+      rec_title = #{recTitle,jdbcType=VARCHAR},
+      rec_xz = #{recXz,jdbcType=VARCHAR},
+      fsqy = #{fsqy,jdbcType=VARCHAR},
+      xcwz = #{xcwz,jdbcType=VARCHAR},
+      xczb = #{xczb,jdbcType=VARCHAR},
+      rec_state = #{recState,jdbcType=INTEGER},
+      xctq = #{xctq,jdbcType=VARCHAR},
+      xcsd = #{xcsd,jdbcType=VARCHAR},
+      xcwd = #{xcwd,jdbcType=VARCHAR},
+      ky_date = #{kyDate,jdbcType=DATE},
+      jj_time = #{jjTime,jdbcType=TIMESTAMP},
+      kyks_time = #{kyksTime,jdbcType=TIMESTAMP},
+      kyjs_time = #{kyjsTime,jdbcType=TIMESTAMP},
+      xcfx = #{xcfx,jdbcType=VARCHAR},
+      xcgz = #{xcgz,jdbcType=VARCHAR},
+      xczk = #{xczk,jdbcType=VARCHAR},
+      bh_flag = #{bhFlag,jdbcType=INTEGER},
+      bhr_id = #{bhrId,jdbcType=VARCHAR},
+      bhr_name = #{bhrName,jdbcType=VARCHAR},
+      bhr_unit_id = #{bhrUnitId,jdbcType=VARCHAR},
+      bhr_unit_name = #{bhrUnitName,jdbcType=VARCHAR},
+      bhr_zw = #{bhrZw,jdbcType=VARCHAR},
+      bdyy = #{bdyy,jdbcType=VARCHAR},
+      bhfs = #{bhfs,jdbcType=VARCHAR},
+      xc_east = #{xcEast,jdbcType=VARCHAR},
+      xc_west = #{xcWest,jdbcType=VARCHAR},
+      xc_south = #{xcSouth,jdbcType=VARCHAR},
+      xc_north = #{xcNorth,jdbcType=VARCHAR},
+      jzr_name = #{jzrName,jdbcType=VARCHAR},
+      jzr_sex = #{jzrSex,jdbcType=VARCHAR},
+      jzr_birth = #{jzrBirth,jdbcType=VARCHAR},
+      jzr_address = #{jzrAddress,jdbcType=VARCHAR},
+      zhr_id = #{zhrId,jdbcType=VARCHAR},
+      zhr_name = #{zhrName,jdbcType=VARCHAR},
+      zhr_unit_id = #{zhrUnitId,jdbcType=VARCHAR},
+      zhr_unit_name = #{zhrUnitName,jdbcType=VARCHAR},
+      zhr_zw = #{zhrZw,jdbcType=VARCHAR},
+      blr_name = #{blrName,jdbcType=VARCHAR},
+      ztr_name = #{ztrName,jdbcType=VARCHAR},
+      zxr_name = #{zxrName,jdbcType=VARCHAR},
+      lxr_name = #{lxrName,jdbcType=VARCHAR},
+      lyr_name = #{lyrName,jdbcType=VARCHAR},
+      jjr_other = #{jjrOther,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      sh_unit_id = #{shUnitId,jdbcType=VARCHAR},
+      sh_unit_name = #{shUnitName,jdbcType=VARCHAR},
+      shyj = #{shyj,jdbcType=VARCHAR},
+      model_id = #{modelId,jdbcType=INTEGER},
+      doc_url = #{docUrl,jdbcType=VARCHAR}
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </update>
+</mapper>

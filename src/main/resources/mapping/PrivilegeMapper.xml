@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.easyfly.main.dao.PrivilegeMapper" >
+  <resultMap id="BaseResultMap" type="com.easyfly.main.bean.Privilege" >
+    <id column="privilege_id" property="privilegeId" jdbcType="INTEGER" />
+    <result column="privilege_master" property="privilegeMaster" jdbcType="VARCHAR" />
+    <result column="privilege_value" property="privilegeValue" jdbcType="INTEGER" />
+    <result column="privilege_access" property="privilegeAccess" jdbcType="VARCHAR" />
+    <result column="privilege_access_value" property="privilegeAccessValue" jdbcType="INTEGER" />
+    <result column="privilege_operation" property="privilegeOperation" jdbcType="BIT" />
+  </resultMap>
+  <resultMap id="RoleResultMap" type="com.easyfly.main.bean.RolePrivilegeBean" >
+    <result column="privilege_name" property="priName" jdbcType="VARCHAR" />
+    <result column="privilege_disp" property="priDisp" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    privilege_id, privilege_master, privilege_value, privilege_access, privilege_access_value, 
+    privilege_operation
+  </sql>
+  <select id="selectButtonPrivilege" resultMap="RoleResultMap" parameterType="String" >
+    select DISTINCT(t3.btn_name) as privilege_name,t3.btn_disp as privilege_disp from privilege t1
+    left join sys_button t3 on t1.privilege_access_value = t3.btn_id
+    left join sys_role t2 on t1.privilege_value = t2.role_id
+    where  t1.privilege_access = 'button' and t1.privilege_operation = 1
+    <if test="_parameter!=null">
+      and t2.role_name IN ( #{param,jdbcType=VARCHAR} )
+    </if>
+  </select>
+  <select id="selectDataPrivilege" resultMap="RoleResultMap" parameterType="String" >
+    select DISTINCT(t3.data_name) as privilege_name,t3.data_disp as privilege_disp from privilege t1
+    left join sys_data t3 on t1.privilege_access_value = t3.sid
+    left join sys_role t2 on t1.privilege_value = t2.role_id
+    where  t1.privilege_access = 'data' and t1.privilege_operation = 1
+    <if test="_parameter!=null">
+      and t2.role_name IN (#{param,jdbcType=VARCHAR})
+    </if>
+  </select>
+  <select id="selectMenuPrivilege" resultMap="RoleResultMap" parameterType="String" >
+    select DISTINCT(t3.menu_name) as privilege_name,t3.menu_disp as privilege_disp from privilege t1
+    left join sys_menu t3 on t1.privilege_access_value = t3.menu_id
+    left join sys_role t2 on t1.privilege_value = t2.role_id
+    where  t1.privilege_access = 'menu' and t1.privilege_operation = 1
+    <if test="_parameter!=null">
+      and t2.role_name IN (#{param,jdbcType=VARCHAR})
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from privilege
+    where privilege_id = #{privilegeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from privilege
+    where privilege_id = #{privilegeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.easyfly.main.bean.Privilege" >
+    insert into privilege (privilege_id, privilege_master, privilege_value, 
+      privilege_access, privilege_access_value, 
+      privilege_operation)
+    values (#{privilegeId,jdbcType=INTEGER}, #{privilegeMaster,jdbcType=VARCHAR}, #{privilegeValue,jdbcType=INTEGER}, 
+      #{privilegeAccess,jdbcType=VARCHAR}, #{privilegeAccessValue,jdbcType=INTEGER}, 
+      #{privilegeOperation,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.easyfly.main.bean.Privilege" >
+    insert into privilege
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="privilegeId != null" >
+        privilege_id,
+      </if>
+      <if test="privilegeMaster != null" >
+        privilege_master,
+      </if>
+      <if test="privilegeValue != null" >
+        privilege_value,
+      </if>
+      <if test="privilegeAccess != null" >
+        privilege_access,
+      </if>
+      <if test="privilegeAccessValue != null" >
+        privilege_access_value,
+      </if>
+      <if test="privilegeOperation != null" >
+        privilege_operation,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="privilegeId != null" >
+        #{privilegeId,jdbcType=INTEGER},
+      </if>
+      <if test="privilegeMaster != null" >
+        #{privilegeMaster,jdbcType=VARCHAR},
+      </if>
+      <if test="privilegeValue != null" >
+        #{privilegeValue,jdbcType=INTEGER},
+      </if>
+      <if test="privilegeAccess != null" >
+        #{privilegeAccess,jdbcType=VARCHAR},
+      </if>
+      <if test="privilegeAccessValue != null" >
+        #{privilegeAccessValue,jdbcType=INTEGER},
+      </if>
+      <if test="privilegeOperation != null" >
+        #{privilegeOperation,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.easyfly.main.bean.Privilege" >
+    update privilege
+    <set >
+      <if test="privilegeMaster != null" >
+        privilege_master = #{privilegeMaster,jdbcType=VARCHAR},
+      </if>
+      <if test="privilegeValue != null" >
+        privilege_value = #{privilegeValue,jdbcType=INTEGER},
+      </if>
+      <if test="privilegeAccess != null" >
+        privilege_access = #{privilegeAccess,jdbcType=VARCHAR},
+      </if>
+      <if test="privilegeAccessValue != null" >
+        privilege_access_value = #{privilegeAccessValue,jdbcType=INTEGER},
+      </if>
+      <if test="privilegeOperation != null" >
+        privilege_operation = #{privilegeOperation,jdbcType=BIT},
+      </if>
+    </set>
+    where privilege_id = #{privilegeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.easyfly.main.bean.Privilege" >
+    update privilege
+    set privilege_master = #{privilegeMaster,jdbcType=VARCHAR},
+      privilege_value = #{privilegeValue,jdbcType=INTEGER},
+      privilege_access = #{privilegeAccess,jdbcType=VARCHAR},
+      privilege_access_value = #{privilegeAccessValue,jdbcType=INTEGER},
+      privilege_operation = #{privilegeOperation,jdbcType=BIT}
+    where privilege_id = #{privilegeId,jdbcType=INTEGER}
+  </update>
+</mapper>

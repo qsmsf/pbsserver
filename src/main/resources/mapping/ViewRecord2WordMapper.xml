@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.easyfly.main.dao.ViewRecord2WordMapper" >
+  <resultMap id="BaseResultMap" type="com.easyfly.main.bean.ViewRecord2Word" >
+    <result column="record_id" property="recordId" jdbcType="INTEGER" />
+    <result column="record_no" property="recordNo" jdbcType="VARCHAR" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+    <result column="kyr_name" property="kyrName" jdbcType="VARCHAR" />
+    <result column="ky_unit_name" property="kyUnitName" jdbcType="VARCHAR" />
+    <result column="jjr_name" property="jjrName" jdbcType="VARCHAR" />
+    <result column="bgr_name" property="bgrName" jdbcType="VARCHAR" />
+    <result column="rec_xz" property="recXz" jdbcType="VARCHAR" />
+    <result column="rec_title" property="recTitle" jdbcType="VARCHAR" />
+    <result column="fsqy" property="fsqy" jdbcType="VARCHAR" />
+    <result column="xcwz" property="xcwz" jdbcType="VARCHAR" />
+    <result column="xczb" property="xczb" jdbcType="VARCHAR" />
+    <result column="xctq" property="xctq" jdbcType="VARCHAR" />
+    <result column="xcsd" property="xcsd" jdbcType="VARCHAR" />
+    <result column="xcwd" property="xcwd" jdbcType="VARCHAR" />
+    <result column="ky_date" property="kyDate" jdbcType="DATE" />
+    <result column="jj_time" property="jjTime" jdbcType="TIMESTAMP" />
+    <result column="kyks_time" property="kyksTime" jdbcType="TIMESTAMP" />
+    <result column="kyjs_time" property="kyjsTime" jdbcType="TIMESTAMP" />
+    <result column="xcfx" property="xcfx" jdbcType="VARCHAR" />
+    <result column="xcgz" property="xcgz" jdbcType="VARCHAR" />
+    <result column="xczk" property="xczk" jdbcType="VARCHAR" />
+    <result column="bh_flag" property="bhFlag" jdbcType="INTEGER" />
+    <result column="bhr_name" property="bhrName" jdbcType="VARCHAR" />
+    <result column="bhr_unit_name" property="bhrUnitName" jdbcType="VARCHAR" />
+    <result column="bhr_zw" property="bhrZw" jdbcType="VARCHAR" />
+    <result column="bdyy" property="bdyy" jdbcType="VARCHAR" />
+    <result column="bhfs" property="bhfs" jdbcType="VARCHAR" />
+    <result column="jzr_name" property="jzrName" jdbcType="VARCHAR" />
+    <result column="jzr_sex" property="jzrSex" jdbcType="VARCHAR" />
+    <result column="jzr_birth" property="jzrBirth" jdbcType="VARCHAR" />
+    <result column="jzr_address" property="jzrAddress" jdbcType="VARCHAR" />
+    <result column="zhr_name" property="zhrName" jdbcType="VARCHAR" />
+    <result column="zhr_unit_name" property="zhrUnitName" jdbcType="VARCHAR" />
+    <result column="zhr_zw" property="zhrZw" jdbcType="VARCHAR" />
+    <result column="blr_name" property="blrName" jdbcType="VARCHAR" />
+    <result column="ztr_name" property="ztrName" jdbcType="VARCHAR" />
+    <result column="zxr_name" property="zxrName" jdbcType="VARCHAR" />
+    <result column="lxr_name" property="lxrName" jdbcType="VARCHAR" />
+    <result column="lyr_name" property="lyrName" jdbcType="VARCHAR" />
+    <result column="jjr_other" property="jjrOther" jdbcType="VARCHAR" />
+    <result column="sh_unit_name" property="shUnitName" jdbcType="VARCHAR" />
+    <result column="shyj" property="shyj" jdbcType="VARCHAR" />
+    <result column="model_id" property="modelId" jdbcType="INTEGER" />
+    <result column="model_name" property="modelName" jdbcType="VARCHAR" />
+    <result column="model_url" property="modelUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.easyfly.main.bean.ViewRecord2WordWithBLOBs" extends="BaseResultMap" >
+    <result column="kysy" property="kysy" jdbcType="LONGVARCHAR" />
+    <result column="xcms" property="xcms" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    record_id, record_no, uuid, kyr_name, ky_unit_name, jjr_name, bgr_name, rec_xz, rec_title, 
+    fsqy, xcwz, xczb, xctq, xcsd, xcwd, ky_date, jj_time, kyks_time, kyjs_time, xcfx, 
+    xcgz, xczk, bh_flag, bhr_name, bhr_unit_name, bhr_zw, bdyy, bhfs, jzr_name, jzr_sex, 
+    jzr_birth, jzr_address, zhr_name, zhr_unit_name, zhr_zw, blr_name, ztr_name, zxr_name, 
+    lxr_name, lyr_name, jjr_other, sh_unit_name, shyj, model_id, model_name, model_url
+  </sql>
+  <sql id="Blob_Column_List" >
+    kysy, xcms
+  </sql>
+  <select id="selectByRecId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from view_record2word
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </select>
+</mapper>

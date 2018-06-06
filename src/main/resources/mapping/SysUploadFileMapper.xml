@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.easyfly.main.dao.SysUploadFileMapper" >
+  <resultMap id="BaseResultMap" type="com.easyfly.main.bean.SysUploadFile" >
+    <id column="file_id" property="fileId" jdbcType="INTEGER" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="file_hint" property="fileHint" jdbcType="VARCHAR" />
+    <result column="file_url" property="fileUrl" jdbcType="VARCHAR" />
+    <result column="file_uploader" property="fileUploader" jdbcType="VARCHAR" />
+    <result column="file_upload_time" property="fileUploadTime" jdbcType="TIMESTAMP" />
+    <result column="record_id" property="recordId" jdbcType="INTEGER" />
+    <result column="file_type" property="fileType" jdbcType="INTEGER" />
+    <result column="rec_uuid" property="recUuid" jdbcType="VARCHAR" />
+    <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    file_id, file_name, file_hint, file_url, file_uploader, file_upload_time, record_id, 
+    file_type, rec_uuid, thumbnail_url
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_upload_file
+    where file_id = #{fileId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUuid" resultMap="BaseResultMap" parameterType="String" >
+    select
+    <include refid="Base_Column_List" />
+    from sys_upload_file
+    <where>
+      <if test="_parameter!=null">
+          and rec_uuid = #{uuid,jdbcType=VARCHAR}
+      </if>
+    </where>
+    ORDER BY file_type
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sys_upload_file
+    where file_id = #{fileId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.easyfly.main.bean.SysUploadFile" >
+    insert into sys_upload_file (file_id, file_name, file_hint, 
+      file_url, file_uploader, file_upload_time, 
+      record_id, file_type, rec_uuid, 
+      thumbnail_url)
+    values (#{fileId,jdbcType=INTEGER}, #{fileName,jdbcType=VARCHAR}, #{fileHint,jdbcType=VARCHAR}, 
+      #{fileUrl,jdbcType=VARCHAR}, #{fileUploader,jdbcType=VARCHAR}, #{fileUploadTime,jdbcType=TIMESTAMP}, 
+      #{recordId,jdbcType=INTEGER}, #{fileType,jdbcType=INTEGER}, #{recUuid,jdbcType=VARCHAR}, 
+      #{thumbnailUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.easyfly.main.bean.SysUploadFile" useGeneratedKeys="true" keyProperty="fileId">
+    insert into sys_upload_file
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fileName != null" >
+        file_name,
+      </if>
+      <if test="fileHint != null" >
+        file_hint,
+      </if>
+      <if test="fileUrl != null" >
+        file_url,
+      </if>
+      <if test="fileUploader != null" >
+        file_uploader,
+      </if>
+      <if test="fileUploadTime != null" >
+        file_upload_time,
+      </if>
+      <if test="recordId != null" >
+        record_id,
+      </if>
+      <if test="fileType != null" >
+        file_type,
+      </if>
+      <if test="recUuid != null" >
+        rec_uuid,
+      </if>
+      <if test="thumbnailUrl != null" >
+        thumbnail_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fileId != null" >
+        #{fileId,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null" >
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileHint != null" >
+        #{fileHint,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null" >
+        #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUploader != null" >
+        #{fileUploader,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUploadTime != null" >
+        #{fileUploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordId != null" >
+        #{recordId,jdbcType=INTEGER},
+      </if>
+      <if test="fileType != null" >
+        #{fileType,jdbcType=INTEGER},
+      </if>
+      <if test="recUuid != null" >
+        #{recUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnailUrl != null" >
+        #{thumbnailUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.easyfly.main.bean.SysUploadFile" >
+    update sys_upload_file
+    <set >
+      <if test="fileName != null" >
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileHint != null" >
+        file_hint = #{fileHint,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null" >
+        file_url = #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUploader != null" >
+        file_uploader = #{fileUploader,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUploadTime != null" >
+        file_upload_time = #{fileUploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordId != null" >
+        record_id = #{recordId,jdbcType=INTEGER},
+      </if>
+      <if test="fileType != null" >
+        file_type = #{fileType,jdbcType=INTEGER},
+      </if>
+      <if test="recUuid != null" >
+        rec_uuid = #{recUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnailUrl != null" >
+        thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where file_id = #{fileId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.easyfly.main.bean.SysUploadFile" >
+    update sys_upload_file
+    set file_name = #{fileName,jdbcType=VARCHAR},
+      file_hint = #{fileHint,jdbcType=VARCHAR},
+      file_url = #{fileUrl,jdbcType=VARCHAR},
+      file_uploader = #{fileUploader,jdbcType=VARCHAR},
+      file_upload_time = #{fileUploadTime,jdbcType=TIMESTAMP},
+      record_id = #{recordId,jdbcType=INTEGER},
+      file_type = #{fileType,jdbcType=INTEGER},
+      rec_uuid = #{recUuid,jdbcType=VARCHAR},
+      thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR}
+    where file_id = #{fileId,jdbcType=INTEGER}
+  </update>
+</mapper>

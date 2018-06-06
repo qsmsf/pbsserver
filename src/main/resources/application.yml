@@ -1,0 +1,39 @@
+server:
+  port: 8081
+  tomcat.uri-encoding: UTF-8
+
+hystrix:
+  command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
+
+entitymanager:
+  packagesToScan: com.easyfly
+
+spring:
+  application:
+    name: pbsserver
+  mvc.view:
+    prefix: /WEB-INF/jsp/
+    suffix: .jsp
+  aop.auto: true
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/pbsserver
+    username: rdis
+    password: rdis
+    driverClassName: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+mybatis:
+  type-aliases-package: com.easyfly.main.bean
+  mapper-locations: classpath*:/mapping/*.xml
+
+#pagehelper分页插件
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
