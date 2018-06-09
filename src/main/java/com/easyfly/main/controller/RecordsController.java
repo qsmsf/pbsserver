@@ -138,7 +138,7 @@ public class RecordsController extends BaseController {
         }
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
-        recNo = "440305 " + c.get(Calendar.YEAR) +recNo;
+        recNo = "440300" + c.get(Calendar.YEAR) +recNo;
         record.setRecordNo(recNo);
         rsl = pbsRecordMapper.updateRecordNo(record);
         if(rsl != 1){
@@ -147,6 +147,10 @@ public class RecordsController extends BaseController {
         }
         for(SysUploadFile fileInfo : fileList){
             rsl = sysUploadFileMapper.updateByPrimaryKeySelective(fileInfo);
+        }
+        if(record.getRecState() == 1004){
+            logger.info("begin to build document...");
+            documentBuilder.wordBuild(record.getRecordId(), request.getSession().getServletContext().getRealPath("")+"/data/");
         }
         return setReturnJson(recNo, CodeMsg.C604);
     }
@@ -165,6 +169,10 @@ public class RecordsController extends BaseController {
         }
         for(SysUploadFile fileInfo : fileList){
             rsl = sysUploadFileMapper.updateByPrimaryKeySelective(fileInfo);
+        }
+        if(record.getRecState() == 1004){
+            logger.info("begin to build document...");
+            documentBuilder.wordBuild(record.getRecordId(), request.getSession().getServletContext().getRealPath("")+"/data/");
         }
         return setReturnJson("", CodeMsg.C604);
     }

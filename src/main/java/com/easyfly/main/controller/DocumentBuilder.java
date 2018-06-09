@@ -116,7 +116,7 @@ public class DocumentBuilder {
                         if(kysy == null){
                             kysy = "";
                         }
-                        for(int t = 0 ; t<320 ;t++){
+                        for(int t = 0 ; t<280 ;t++){
                             kysy += " ";
                         }
                         listRun.get(j).setText(kysy,0);
@@ -291,9 +291,9 @@ public class DocumentBuilder {
                     }else if("#{zxr}#".equals(listRun.get(j).getText(0))){
                         listRun.get(j).setText(record.getZxrName(),0);
                     }else if("#{lxr}#".equals(listRun.get(j).getText(0))){
-                        listRun.get(j).setText(record.getXcms(),0);
+                        listRun.get(j).setText(record.getLxrName(),0);
                     }else if("#{lyr}#".equals(listRun.get(j).getText(0))){
-                        listRun.get(j).setText(record.getXcms(),0);
+                        listRun.get(j).setText(record.getLyrName(),0);
                     }else if("#{ztNum}#".equals(listRun.get(j).getText(0))){
                         listRun.get(j).setText(ztNum+"",0);
                     }else if("#{picNum}#".equals(listRun.get(j).getText(0))){
@@ -346,8 +346,9 @@ public class DocumentBuilder {
                             if(picList.size() > 0){
                                 fileInfo = picList.get(0);
                                 hintText = fileInfo.getFileHint();
+                                replaceFlag = true;
                             }
-                            replaceFlag = true;
+
                         }else if("#{pic3}#".equals(cell.getText())) {
                             if(picList.size() > 1){
                                 fileInfo = picList.get(1);
@@ -358,8 +359,9 @@ public class DocumentBuilder {
                             if(picList.size() > 1){
                                 fileInfo = picList.get(1);
                                 hintText = fileInfo.getFileHint();
+                                replaceFlag = true;
                             }
-                            replaceFlag = true;
+
                         }else if("#{pic4}#".equals(cell.getText())) {
                             if(picList.size() > 2){
                                 fileInfo = picList.get(2);
@@ -370,8 +372,9 @@ public class DocumentBuilder {
                             if(picList.size() > 2){
                                 fileInfo = picList.get(2);
                                 hintText = fileInfo.getFileHint();
+                                replaceFlag = true;
                             }
-                            replaceFlag = true;
+
                         }else if("#{pic5}#".equals(cell.getText())) {
                             if(picList.size() > 3){
                                 fileInfo = picList.get(3);
@@ -382,8 +385,9 @@ public class DocumentBuilder {
                             if(picList.size() > 3){
                                 fileInfo = picList.get(3);
                                 hintText = fileInfo.getFileHint();
+                                replaceFlag = true;
                             }
-                            replaceFlag = true;
+
                         }else if("#{pic6}#".equals(cell.getText())) {
                             if(picList.size() > 4){
                                 fileInfo = picList.get(4);
@@ -394,8 +398,9 @@ public class DocumentBuilder {
                             if(picList.size() > 4){
                                 fileInfo = picList.get(4);
                                 hintText = fileInfo.getFileHint();
+                                replaceFlag = true;
                             }
-                            replaceFlag = true;
+
                         }else if("#{pic7}#".equals(cell.getText())) {
                             if(picList.size() > 5){
                                 fileInfo = picList.get(5);
@@ -406,8 +411,9 @@ public class DocumentBuilder {
                             if(picList.size() > 5){
                                 fileInfo = picList.get(5);
                                 hintText = fileInfo.getFileHint();
+                                replaceFlag = true;
                             }
-                            replaceFlag = true;
+
                         }
 
                         if(replaceFlag && addPicFlag) {
