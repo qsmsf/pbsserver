@@ -40,6 +40,8 @@ public class RecordsController extends BaseController {
     private ViewRecord2WordMapper viewRecord2WordMapper;
     @Autowired
     private DocumentBuilder documentBuilder;
+    @Autowired
+    private MyProps myProps;
 
     public class GetRecentRecordListResponse{
         private int rowNum;

@@ -4,6 +4,7 @@ import cn.gov.szga.s3.UpoladFileResponse;
 import cn.gov.szga.s3.UpoladFlieRequest;
 import com.alibaba.fastjson.JSON;
 import com.easyfly.main.base.controller.BaseController;
+import com.easyfly.main.bean.MyProps;
 import com.easyfly.main.bean.SysUploadFile;
 import com.easyfly.main.bean.UploadFileResultBean;
 import com.easyfly.main.dao.SysUploadFileMapper;
@@ -33,6 +34,9 @@ public class UploadFileController extends BaseController {
 
     @Autowired
     private SysUploadFileMapper sysUploadFileMapper;
+
+    @Autowired
+    private MyProps myProps;
 
     @CrossOrigin
     @ResponseBody
@@ -107,6 +111,35 @@ public class UploadFileController extends BaseController {
         }
         Part part = request.getPart("file");
         InputStream is = part.getInputStream();
+        SysUploadFile fileInfo = new SysUploadFile();
+
+        if(myProps.getDebugMode())
+        {
+            String pathName = request.getSession().getServletContext().getRealPath("")+"/data/";
+            String newFileName = (new Date()).getTime() + "";
+            String fileExtType = part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf('.'));
+
+            File file = new File(pathName + newFileName + fileExtType);
+            OutputStream os = new FileOutputStream(file);
+            int bytesRead = 0;
+            byte[] buffer = new byte[8192];
+            while ((bytesRead = is.read(buffer, 0, 8192)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+            os.close();
+            is.close();
+
+
+            fileInfo.setFileName(newFileName + fileExtType);
+            fileInfo.setFileType(2001);
+            fileInfo.setFileHint(part.getSubmittedFileName());
+            fileInfo.setFileUploader("1");
+            String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
+            fileInfo.setFileUrl(basePath+"/uploadFiles/downloadFile?fileName="+part.getSubmittedFileName());
+            fileInfo.setRecUuid(uuid);
+            fileInfo.setThumbnailUrl(fileInfo.getFileUrl());
+            fileInfo.setFileUploadTime(new Date());
+        }
         /* 公安内网
         FileInputStream fis = (FileInputStream) (is);
         LoginUserInfo user = getCurrentUser();
@@ -128,26 +161,7 @@ public class UploadFileController extends BaseController {
         */
         //本地测试
 
-        String pathName = request.getSession().getServletContext().getRealPath("")+"/data/";
-        File file = new File(pathName+part.getSubmittedFileName());
-        OutputStream os = new FileOutputStream(file);
-        int bytesRead = 0;
-        byte[] buffer = new byte[8192];
-        while ((bytesRead = is.read(buffer, 0, 8192)) != -1) {
-            os.write(buffer, 0, bytesRead);
-        }
-        os.close();
-        is.close();
 
-        SysUploadFile fileInfo = new SysUploadFile();
-        fileInfo.setFileName(part.getSubmittedFileName());
-        fileInfo.setFileType(2001);
-        fileInfo.setFileUploader("1");
-        String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
-        fileInfo.setFileUrl(basePath+"/uploadFiles/downloadFile?fileName="+part.getSubmittedFileName());
-        fileInfo.setRecUuid(uuid);
-        fileInfo.setThumbnailUrl(fileInfo.getFileUrl());
-        fileInfo.setFileUploadTime(new Date());
         //
         int rsl = sysUploadFileMapper.insertSelective(fileInfo);
         if( rsl != 1){
