@@ -413,6 +413,27 @@ public class DocumentBuilder {
                                 hintText = fileInfo.getFileHint();
                                 replaceFlag = true;
                             }
+                        }else if("#{pic8}#".equals(cell.getText())) {
+                            if(picList.size() > 6){
+                                fileInfo = picList.get(6);
+                                addPicFlag = true;
+                            }
+                            replaceFlag = true;
+                        }else if("#{hint8}#".equals(cell.getText())){/**判断单元格中是否为需要替换的文本内容*/
+                            if(picList.size() > 6){
+                                fileInfo = picList.get(6);
+                                hintText = fileInfo.getFileHint();
+                                replaceFlag = true;
+                            }
+                        }else if("#{jzrqm1}#".equals(cell.getText())){
+
+                        }else if("#{jzrqm12}#".equals(cell.getText())){
+
+                        }else if("#{jzrSex}#".equals(cell.getText())){
+
+                        }else if("#{jzrBirth}#".equals(cell.getText())){
+
+                        }else if("#{jzrAddress}#".equals(cell.getText())){
 
                         }
 
