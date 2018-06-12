@@ -20,9 +20,11 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 import static com.sun.tools.doclint.Entity.image;
 
@@ -62,17 +64,25 @@ public class DocumentBuilder {
         if(!isExist.exists()){
             return  1;//"源文件不存在！";
         }
-        int ztNum = 0;
+        int xctNum = 0;
+        int pmtNum = 0;
         int picNum = 0;
-        List<SysUploadFile> ztList = new ArrayList<>();
+        List<SysUploadFile> xctList = new ArrayList<>();
+        List<SysUploadFile> pmtList = new ArrayList<>();
         List<SysUploadFile> picList = new ArrayList<>();
+        SysUploadFile qmt = new SysUploadFile();
         for (SysUploadFile file : fileList) {
-            if(file.getFileType() == 2004){
-                ztNum++;
-                ztList.add(file);
+            if(file.getFileType() == 2007){
+                xctNum++;
+                xctList.add(file);
             }else if(file.getFileType() == 2001 || file.getFileType() == 2002 || file.getFileType() == 2003){
                 picNum++;
                 picList.add(file);
+            }else if(file.getFileType() == 2008 ){
+                pmtNum++;
+                pmtList.add(file);
+            }else if(file.getFileType() == 2006) {
+                qmt = file;
             }
         }
         CustomXWPFDocument document;
@@ -295,7 +305,7 @@ public class DocumentBuilder {
                     }else if("#{lyr}#".equals(listRun.get(j).getText(0))){
                         listRun.get(j).setText(record.getLyrName(),0);
                     }else if("#{ztNum}#".equals(listRun.get(j).getText(0))){
-                        listRun.get(j).setText(ztNum+"",0);
+                        listRun.get(j).setText(xctNum+pmtNum+"",0);
                     }else if("#{picNum}#".equals(listRun.get(j).getText(0))){
                         listRun.get(j).setText(picNum+"",0);
                     }else if("#{jzrSex}#".equals(listRun.get(j).getText(0))){
@@ -318,6 +328,7 @@ public class DocumentBuilder {
             }
             /**取得文本的所有表格*/
             Iterator<XWPFTable> it = document.getTablesIterator();
+            int picindex = 1;
             while(it.hasNext()){/**循环操作表格*/
                 XWPFTable table = it.next();
                 List<XWPFTableRow> rows = table.getRows();
@@ -329,112 +340,261 @@ public class DocumentBuilder {
                         boolean addPicFlag = false;
                         boolean replaceFlag = false;
                         if("#{pic1}#".equals(cell.getText())) {/**判断单元格的内容是否为需要替换的图片内容*/
-                            if(ztList.size() > 0){
-                                fileInfo = ztList.get(0);
-                                addPicFlag = true;
-                            }
                             replaceFlag = true;
+                            addPicFlag = true;
+                            if(xctNum > 0){
+                                fileInfo = xctList.get(0);
+                            }else if( pmtNum > 0){
+                                fileInfo = pmtList.get(0);
+                            }else if( picNum > 0) {
+                                fileInfo = picList.get(0);
+                            }else{
+                                replaceFlag = false;
+                                addPicFlag = false;
+                            }
                         }else if("#{hint1}#".equals(cell.getText())){/**判断单元格中是否为需要替换的文本内容*/
                             replaceFlag = true;
+                            if(xctNum > 0){
+                                fileInfo = xctList.get(0);
+                                hintText = fileInfo.getFileHint();
+                            }else if( pmtNum > 0){
+                                fileInfo = pmtList.get(0);
+                                hintText = fileInfo.getFileHint();
+                            }else if( picNum > 0) {
+                                fileInfo = picList.get(0);
+                                hintText = fileInfo.getFileHint();
+                            }else{
+                                replaceFlag = false;
+                            }
                         }else if("#{pic2}#".equals(cell.getText())) {
-                            if(picList.size() > 0){
-                                fileInfo = picList.get(0);
-                                addPicFlag = true;
-                            }
                             replaceFlag = true;
+                            addPicFlag = true;
+                            if(xctNum > 1){
+                                fileInfo = xctList.get(1);
+                            }else if( pmtNum > 1 - xctNum){
+                                fileInfo = pmtList.get(1 - xctNum);
+                            }else if( picNum > 1 - xctNum - pmtNum) {
+                                fileInfo = picList.get(1 - xctNum - pmtNum);
+                            }else{
+                                replaceFlag = false;
+                                addPicFlag = false;
+                            }
                         }else if("#{hint2}#".equals(cell.getText())){/**判断单元格中是否为需要替换的文本内容*/
-                            if(picList.size() > 0){
-                                fileInfo = picList.get(0);
+                            replaceFlag = true;
+                            if(xctNum > 1){
+                                fileInfo = xctList.get(1);
                                 hintText = fileInfo.getFileHint();
-                                replaceFlag = true;
+                            }else if( pmtNum > 1 - xctNum){
+                                fileInfo = pmtList.get(1 - xctNum);
+                                hintText = fileInfo.getFileHint();
+                            }else if( picNum > 1 - xctNum - pmtNum) {
+                                fileInfo = picList.get(1 - xctNum - pmtNum);
+                                hintText = fileInfo.getFileHint();
+                            }else{
+                                replaceFlag = false;
                             }
-
                         }else if("#{pic3}#".equals(cell.getText())) {
-                            if(picList.size() > 1){
-                                fileInfo = picList.get(1);
-                                addPicFlag = true;
-                            }
+                            addPicFlag = true;
                             replaceFlag = true;
+                            if(xctNum > 2){
+                                fileInfo = xctList.get(2);
+                            }else if( pmtNum > 2 - xctNum){
+                                fileInfo = pmtList.get(2 - xctNum);
+                            }else if( picNum > 2 - xctNum - pmtNum) {
+                                fileInfo = picList.get(2 - xctNum - pmtNum);
+                            }else{
+                                addPicFlag = false;
+                                replaceFlag = false;
+                            }
                         }else if("#{hint3}#".equals(cell.getText())){/**判断单元格中是否为需要替换的文本内容*/
-                            if(picList.size() > 1){
-                                fileInfo = picList.get(1);
+                            replaceFlag = true;
+                            if(xctNum > 2){
+                                fileInfo = xctList.get(2);
                                 hintText = fileInfo.getFileHint();
-                                replaceFlag = true;
+                            }else if( pmtNum > 2 - xctNum){
+                                fileInfo = pmtList.get(2 - xctNum);
+                                hintText = fileInfo.getFileHint();
+                            }else if( picNum > 2 - xctNum - pmtNum) {
+                                fileInfo = picList.get(2 - xctNum - pmtNum);
+                                hintText = fileInfo.getFileHint();
+                            }else {
+                                replaceFlag = false;
                             }
-
                         }else if("#{pic4}#".equals(cell.getText())) {
-                            if(picList.size() > 2){
-                                fileInfo = picList.get(2);
-                                addPicFlag = true;
-                            }
+                            addPicFlag = true;
                             replaceFlag = true;
+                            if(xctNum > 3){
+                                fileInfo = xctList.get(3);
+                            }else if( pmtNum > 3 - xctNum){
+                                fileInfo = pmtList.get(3 - xctNum);
+                            }else if( picNum > 3 - xctNum - pmtNum) {
+                                fileInfo = picList.get(3 - xctNum - pmtNum);
+                            }else{
+                                addPicFlag = false;
+                                replaceFlag = false;
+                            }
                         }else if("#{hint4}#".equals(cell.getText())){/**判断单元格中是否为需要替换的文本内容*/
-                            if(picList.size() > 2){
-                                fileInfo = picList.get(2);
+                            replaceFlag = true;
+                            if(xctNum > 3){
+                                fileInfo = xctList.get(3);
                                 hintText = fileInfo.getFileHint();
-                                replaceFlag = true;
+                            }else if( pmtNum > 3 - xctNum){
+                                fileInfo = pmtList.get(3 - xctNum);
+                                hintText = fileInfo.getFileHint();
+                            }else if( picNum > 3 - xctNum - pmtNum) {
+                                fileInfo = picList.get(3 - xctNum - pmtNum);
+                                hintText = fileInfo.getFileHint();
+                            }else{
+                                replaceFlag = false;
                             }
-
                         }else if("#{pic5}#".equals(cell.getText())) {
-                            if(picList.size() > 3){
-                                fileInfo = picList.get(3);
-                                addPicFlag = true;
-                            }
+                            addPicFlag = true;
                             replaceFlag = true;
+                            if(xctNum > 4){
+                                fileInfo = xctList.get(4);
+                            }else if( pmtNum > 4 - xctNum){
+                                fileInfo = pmtList.get(4 - xctNum);
+                            }else if( picNum > 4 - xctNum - pmtNum) {
+                                fileInfo = picList.get(4 - xctNum - pmtNum);
+                            }else{
+                                addPicFlag = true;
+                                replaceFlag = true;
+                            }
                         }else if("#{hint5}#".equals(cell.getText())){/**判断单元格中是否为需要替换的文本内容*/
-                            if(picList.size() > 3){
-                                fileInfo = picList.get(3);
+                            replaceFlag = true;
+                            if(xctNum > 4){
+                                fileInfo = xctList.get(4);
                                 hintText = fileInfo.getFileHint();
-                                replaceFlag = true;
+                            }else if( pmtNum > 4 - xctNum){
+                                fileInfo = pmtList.get(4 - xctNum);
+                                hintText = fileInfo.getFileHint();
+                            }else if( picNum > 4 - xctNum - pmtNum) {
+                                fileInfo = picList.get(4 - xctNum - pmtNum);
+                                hintText = fileInfo.getFileHint();
+                            }else{
+                                replaceFlag = false;
                             }
-
                         }else if("#{pic6}#".equals(cell.getText())) {
-                            if(picList.size() > 4){
-                                fileInfo = picList.get(4);
-                                addPicFlag = true;
-                            }
+                            addPicFlag = true;
                             replaceFlag = true;
+                            if(xctNum > 5){
+                                fileInfo = xctList.get(5);
+                            }else if( pmtNum > 5 - xctNum){
+                                fileInfo = pmtList.get(5 - xctNum);
+                            }else if( picNum > 5 - xctNum - pmtNum) {
+                                fileInfo = picList.get(5 - xctNum - pmtNum);
+                            }else{
+                                addPicFlag = true;
+                                replaceFlag = true;
+                            }
                         }else if("#{hint6}#".equals(cell.getText())){/**判断单元格中是否为需要替换的文本内容*/
-                            if(picList.size() > 4){
-                                fileInfo = picList.get(4);
-                                hintText = fileInfo.getFileHint();
-                                replaceFlag = true;
-                            }
-
-                        }else if("#{pic7}#".equals(cell.getText())) {
-                            if(picList.size() > 5){
-                                fileInfo = picList.get(5);
-                                addPicFlag = true;
-                            }
                             replaceFlag = true;
-                        }else if("#{hint7}#".equals(cell.getText())){/**判断单元格中是否为需要替换的文本内容*/
-                            if(picList.size() > 5){
-                                fileInfo = picList.get(5);
+                            if(xctNum > 5){
+                                fileInfo = xctList.get(5);
                                 hintText = fileInfo.getFileHint();
+                            }else if( pmtNum > 5 - xctNum){
+                                fileInfo = pmtList.get(5 - xctNum);
+                                hintText = fileInfo.getFileHint();
+                            }else if( picNum > 5 - xctNum - pmtNum) {
+                                fileInfo = picList.get(5 - xctNum - pmtNum);
+                                hintText = fileInfo.getFileHint();
+                            }else{
+                                replaceFlag = false;
+                            }
+                        }else if("#{pic7}#".equals(cell.getText())) {
+                            addPicFlag = true;
+                            replaceFlag = true;
+                            if(xctNum > 6){
+                                fileInfo = xctList.get(6);
+                            }else if( pmtNum > 6 - xctNum){
+                                fileInfo = pmtList.get(6 - xctNum);
+                            }else if( picNum > 6 - xctNum - pmtNum) {
+                                fileInfo = picList.get(6 - xctNum - pmtNum);
+                            }else{
+                                addPicFlag = true;
                                 replaceFlag = true;
+                            }
+                        }else if("#{hint7}#".equals(cell.getText())){/**判断单元格中是否为需要替换的文本内容*/
+                            replaceFlag = true;
+                            if(xctNum > 6){
+                                fileInfo = xctList.get(6);
+                                hintText = fileInfo.getFileHint();
+                            }else if( pmtNum > 6 - xctNum){
+                                fileInfo = pmtList.get(6 - xctNum);
+                                hintText = fileInfo.getFileHint();
+                            }else if( picNum > 6 - xctNum - pmtNum) {
+                                fileInfo = picList.get(6 - xctNum - pmtNum);
+                                hintText = fileInfo.getFileHint();
+                            }else{
+                                replaceFlag = false;
                             }
                         }else if("#{pic8}#".equals(cell.getText())) {
-                            if(picList.size() > 6){
-                                fileInfo = picList.get(6);
-                                addPicFlag = true;
-                            }
+                            addPicFlag = true;
                             replaceFlag = true;
-                        }else if("#{hint8}#".equals(cell.getText())){/**判断单元格中是否为需要替换的文本内容*/
-                            if(picList.size() > 6){
-                                fileInfo = picList.get(6);
-                                hintText = fileInfo.getFileHint();
+                            if(xctNum > 7){
+                                fileInfo = xctList.get(6);
+                            }else if( pmtNum > 7 - xctNum){
+                                fileInfo = pmtList.get(7 - xctNum);
+                            }else if( picNum > 7 - xctNum - pmtNum) {
+                                fileInfo = picList.get(7 - xctNum - pmtNum);
+                            }else{
+                                addPicFlag = true;
                                 replaceFlag = true;
                             }
-                        }else if("#{jzrqm1}#".equals(cell.getText())){
+                        }else if("#{hint8}#".equals(cell.getText())){/**判断单元格中是否为需要替换的文本内容*/
+                            replaceFlag = true;
+                            if(xctNum > 7){
+                                fileInfo = xctList.get(7);
+                                hintText = fileInfo.getFileHint();
+                            }else if( pmtNum > 7 - xctNum){
+                                fileInfo = pmtList.get(7 - xctNum);
+                                hintText = fileInfo.getFileHint();
+                            }else if( picNum > 7 - xctNum - pmtNum) {
+                                fileInfo = picList.get(7 - xctNum - pmtNum);
+                                hintText = fileInfo.getFileHint();
+                            }else{
+                                replaceFlag = false;
+                            }
+                        }else if("#{jzrqm1}#".equals(cell.getText()) || "#{jzrqm12}#".equals(cell.getText())){
+                            File pic =  new File(filePath+ qmt.getFileName());
+                            InputStream is =  CommonUtils.getFileFromUrl(fileInfo.getFileUrl());
+                            BufferedImage bi = ImageIO.read(is);
+                            RectSize size = new RectSize();
+                            bi = CommonUtils.rotateImage(bi, 90);
+                            size = CommonUtils.getFitSize(bi,100,200);
 
-                        }else if("#{jzrqm12}#".equals(cell.getText())){
+                            ByteArrayOutputStream os = new ByteArrayOutputStream();
+                            ImageIO.write(bi, "png", os);
+                            InputStream rsl = new ByteArrayInputStream(os.toByteArray());
 
+                            cell.removeParagraph(0);
+                            XWPFParagraph pargraph = cell.addParagraph();
+                            pargraph.setAlignment(ParagraphAlignment.CENTER);
+                            document.addPictureData(rsl, XWPFDocument.PICTURE_TYPE_PNG);
+                            document.createPicture(document.getAllPictures().size() - 1, size.getWidth(), size.getHeight(), pargraph);
+                            if (is != null) {
+                                is.close();
+                            }
+                            if(rsl != null) {
+                                rsl.close();
+                            }
+                            if(os != null) {
+                                os.close();
+                            }
+                            List<XWPFParagraph> pars = cell.getParagraphs();
+                            for (XWPFParagraph par : pars) {
+                                List<XWPFRun> runs = par.getRuns();
+                                for (XWPFRun run : runs) {
+                                    run.removeBreak();
+                                }
+                            }
+                            continue;
                         }else if("#{jzrSex}#".equals(cell.getText())){
-
+                            cell.setText(record.getJzrSex());
                         }else if("#{jzrBirth}#".equals(cell.getText())){
-
+                            cell.setText(record.getJzrBirth());
                         }else if("#{jzrAddress}#".equals(cell.getText())){
-
+                            cell.setText(record.getJzrAddress());
                         }
 
                         if(replaceFlag && addPicFlag) {
@@ -445,7 +605,23 @@ public class DocumentBuilder {
                             BufferedImage bi = ImageIO.read(is);
                             RectSize size = new RectSize();
                             //FileInputStream fis = (FileInputStream) is;
-                            if(fileInfo.getFileType() == 2004){
+                            if(fileInfo.getFileType() == 2007){
+                                bi = CommonUtils.rotateImage(bi, 90);
+
+                                File srcImgFile = new File(filePath+"/blank_bg.jpeg");//得到文件
+                                Image srcImg = ImageIO.read(srcImgFile);//文件转化为图片
+                                BufferedImage bufImg = new BufferedImage(4500, 2400, BufferedImage.TYPE_INT_RGB);
+                                Graphics2D g = bufImg.createGraphics();
+                                g.drawImage(srcImg, 0,0,4500,2400,null);
+                                g.drawImage(bi, 100,300,3000,1800, null);
+                                g.setColor(Color.black);
+                                Font titleFont = new Font("TimesRoman",Font.BOLD, 30);
+                                Font contentFont = new Font("TimesRoman",Font.BOLD, 20);
+                                g.setFont(titleFont);
+                                g.drawString("", 100,200);
+
+                                size = CommonUtils.getFitSize(bi, 800, 600);
+                            }else if(fileInfo.getFileType() == 2008){
                                 bi = CommonUtils.rotateImage(bi, 90);
                                 size = CommonUtils.getFitSize(bi, 800, 600);
                             }else{

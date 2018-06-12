@@ -109,10 +109,22 @@ public class UploadFileController extends BaseController {
         if(uuid.equals("")){
             return setReturnJson("主键为空", CodeMsg.C702);
         }
+
         Part part = request.getPart("file");
         InputStream is = part.getInputStream();
         SysUploadFile fileInfo = new SysUploadFile();
 
+        if(part.getSubmittedFileName().equals(uuid+".png")){
+            fileInfo.setFileType(2006);
+        }else if(part.getSubmittedFileName().equals(uuid+"_xct.jpeg")){
+            fileInfo.setFileType(2007);
+        }else if(part.getSubmittedFileName().equals(uuid+"_pmt.jpeg")){
+            fileInfo.setFileType(2008);
+        }else{
+            fileInfo.setFileType(2005);
+        }
+        fileInfo.setFileUploadTime(new Date());
+        fileInfo.setRecUuid(uuid);
         if(myProps.getDebugMode())
         {
             String pathName = request.getSession().getServletContext().getRealPath("")+"/data/";
@@ -128,37 +140,32 @@ public class UploadFileController extends BaseController {
             }
             os.close();
             is.close();
-
-
             fileInfo.setFileName(newFileName + fileExtType);
-            fileInfo.setFileType(2001);
-            fileInfo.setFileHint(part.getSubmittedFileName());
+
+//            fileInfo.setFileHint(part.getSubmittedFileName());
             fileInfo.setFileUploader("1");
             String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
             fileInfo.setFileUrl(basePath+"/uploadFiles/downloadFile?fileName="+part.getSubmittedFileName());
-            fileInfo.setRecUuid(uuid);
-            fileInfo.setThumbnailUrl(fileInfo.getFileUrl());
-            fileInfo.setFileUploadTime(new Date());
-        }
-        /* 公安内网
-        FileInputStream fis = (FileInputStream) (is);
-        LoginUserInfo user = getCurrentUser();
-        UpoladFlieRequest request = new UpoladFlieRequest(user.getToken());
-        UpoladFileResponse response = request.sendFileStreamRequest(fis ,APPCODE ,part.getSubmittedFileName());
-        if(!response.isSuccess()){
-            return setReturnJson(CodeMsg.C703_MSG, CodeMsg.C703);
-        }
-        UploadFileResultBean result = JSONUtil.parseObject(response.getResult(), UploadFileResultBean.class);
-        SysUploadFile fileInfo = new SysUploadFile();
-        fileInfo.setFileName(result.getKey());
-        fileInfo.setFileType(2001);
-        fileInfo.setFileUploader(user.getUserCode());
-        fileInfo.setFileUrl(result.getFile_url());
-        fileInfo.setRecUuid(uuid);
-        fileInfo.setThumbnailUrl(result.getFile_url());
-        fileInfo.setFileUploadTime(new Date());
 
-        */
+            fileInfo.setThumbnailUrl(fileInfo.getFileUrl());
+        }else{
+            //公安内网
+            FileInputStream fis = (FileInputStream) (is);
+            LoginUserInfo user = getCurrentUser();
+            UpoladFlieRequest request = new UpoladFlieRequest(user.getToken());
+            UpoladFileResponse response = request.sendFileStreamRequest(fis ,APPCODE ,part.getSubmittedFileName());
+            if(!response.isSuccess()){
+                return setReturnJson(CodeMsg.C703_MSG, CodeMsg.C703);
+            }
+            UploadFileResultBean result = JSONUtil.parseObject(response.getResult(), UploadFileResultBean.class);
+
+            //SysUploadFile fileInfo = new SysUploadFile();
+            fileInfo.setFileName(result.getKey());
+            fileInfo.setFileUploader(user.getUserCode());
+            fileInfo.setFileUrl(result.getFile_url());
+            fileInfo.setThumbnailUrl(result.getFile_url());
+        }
+
         //本地测试
 
 
