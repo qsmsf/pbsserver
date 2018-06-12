@@ -243,14 +243,15 @@
     where record_id = #{recordId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.easyfly.main.bean.PbsRecordWithBLOBs" >
-    insert into pbs_record (record_id, record_no, uuid, 
+    insert into pbs_record (record_id, record_no,
+      record_ky_no, record_jj_no, record_aj_no, uuid,
       kyr_name, ky_unit_name, jjr_id, 
       jjr_name, jj_unit_id, jj_unit_name, 
       kyr_id, ky_unit_id, bgr_id, 
       bgr_name, rec_title, rec_xz, 
       fsqy, xcwz, xczb, rec_state, 
       xctq, xcsd, xcwd, ky_date, 
-      jj_time, kyks_time, kyjs_time, 
+      jj_time, af_time, kyks_time, kyjs_time,
       xcfx, xcgz, xczk, bh_flag, 
       bhr_id, bhr_name, bhr_unit_id, 
       bhr_unit_name, bhr_zw, bdyy, 
@@ -264,14 +265,15 @@
       update_time, sh_unit_id, sh_unit_name, 
       shyj, model_id, doc_url, 
       kysy, xcms)
-    values (#{recordId,jdbcType=INTEGER}, #{recordNo,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, 
+    values (#{recordId,jdbcType=INTEGER}, #{recordNo,jdbcType=VARCHAR},#{recordKyNo,jdbcType=VARCHAR},
+      #{recordJjNo,jdbcType=VARCHAR}, #{recordAjNo,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR},
       #{kyrName,jdbcType=VARCHAR}, #{kyUnitName,jdbcType=VARCHAR}, #{jjrId,jdbcType=VARCHAR}, 
       #{jjrName,jdbcType=VARCHAR}, #{jjUnitId,jdbcType=VARCHAR}, #{jjUnitName,jdbcType=VARCHAR}, 
       #{kyrId,jdbcType=VARCHAR}, #{kyUnitId,jdbcType=VARCHAR}, #{bgrId,jdbcType=VARCHAR}, 
       #{bgrName,jdbcType=VARCHAR}, #{recTitle,jdbcType=VARCHAR}, #{recXz,jdbcType=VARCHAR}, 
       #{fsqy,jdbcType=VARCHAR}, #{xcwz,jdbcType=VARCHAR}, #{xczb,jdbcType=VARCHAR}, #{recState,jdbcType=INTEGER}, 
       #{xctq,jdbcType=VARCHAR}, #{xcsd,jdbcType=VARCHAR}, #{xcwd,jdbcType=VARCHAR}, #{kyDate,jdbcType=DATE}, 
-      #{jjTime,jdbcType=TIMESTAMP}, #{kyksTime,jdbcType=TIMESTAMP}, #{kyjsTime,jdbcType=TIMESTAMP}, 
+      #{jjTime,jdbcType=TIMESTAMP}, #{afTime,jdbcType=TIMESTAMP}, #{kyksTime,jdbcType=TIMESTAMP}, #{kyjsTime,jdbcType=TIMESTAMP},
       #{xcfx,jdbcType=VARCHAR}, #{xcgz,jdbcType=VARCHAR}, #{xczk,jdbcType=VARCHAR}, #{bhFlag,jdbcType=INTEGER}, 
       #{bhrId,jdbcType=VARCHAR}, #{bhrName,jdbcType=VARCHAR}, #{bhrUnitId,jdbcType=VARCHAR}, 
       #{bhrUnitName,jdbcType=VARCHAR}, #{bhrZw,jdbcType=VARCHAR}, #{bdyy,jdbcType=VARCHAR}, 
@@ -291,6 +293,15 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="recordNo != null" >
         record_no,
+      </if>
+      <if test="recordKyNo != null" >
+        record_ky_no,
+      </if>
+      <if test="recordJjNo != null" >
+        record_jj_no,
+      </if>
+      <if test="recordAjNo != null" >
+        record_aj_no,
       </if>
       <if test="uuid != null" >
         uuid,
@@ -357,6 +368,9 @@
       </if>
       <if test="jjTime != null" >
         jj_time,
+      </if>
+      <if test="afTime != null" >
+        af_time,
       </if>
       <if test="kyksTime != null" >
         kyks_time,
@@ -486,6 +500,15 @@
       <if test="recordNo != null" >
         #{recordNo,jdbcType=VARCHAR},
       </if>
+      <if test="recordKyNo != null" >
+        #{recordKyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="recordJjNo != null" >
+        #{recordJjNo,jdbcType=VARCHAR},
+      </if>
+      <if test="recordAjNo != null" >
+        #{recordAjNo,jdbcType=VARCHAR},
+      </if>
       <if test="uuid != null" >
         #{uuid,jdbcType=VARCHAR},
       </if>
@@ -551,6 +574,9 @@
       </if>
       <if test="jjTime != null" >
         #{jjTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="afTime != null" >
+        #{afTime,jdbcType=TIMESTAMP},
       </if>
       <if test="kyksTime != null" >
         #{kyksTime,jdbcType=TIMESTAMP},
@@ -683,6 +709,15 @@
       <if test="recordNo != null" >
         record_no = #{recordNo,jdbcType=VARCHAR},
       </if>
+      <if test="recordKyNo != null" >
+        record_ky_no = #{recordKyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="recordJjNo != null" >
+        record_jj_no = #{recordJjNo,jdbcType=VARCHAR},
+      </if>
+      <if test="recordAjNo != null" >
+        record_aj_no = #{recordAjNo,jdbcType=VARCHAR},
+      </if>
       <if test="uuid != null" >
         uuid = #{uuid,jdbcType=VARCHAR},
       </if>
@@ -748,6 +783,9 @@
       </if>
       <if test="jjTime != null" >
         jj_time = #{jjTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="afTime != null" >
+        af_time = #{afTime,jdbcType=TIMESTAMP},
       </if>
       <if test="kyksTime != null" >
         kyks_time = #{kyksTime,jdbcType=TIMESTAMP},
@@ -911,6 +949,9 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.easyfly.main.bean.PbsRecordWithBLOBs" >
     update pbs_record
     set record_no = #{recordNo,jdbcType=VARCHAR},
+      record_ky_no = #{recordKyNo,jdbcType=VARCHAR},
+      record_jj_no = #{recordJjNo,jdbcType=VARCHAR},
+      record_aj_no = #{recordAjNo,jdbcType=VARCHAR},
       uuid = #{uuid,jdbcType=VARCHAR},
       kyr_name = #{kyrName,jdbcType=VARCHAR},
       ky_unit_name = #{kyUnitName,jdbcType=VARCHAR},
@@ -933,6 +974,7 @@
       xcwd = #{xcwd,jdbcType=VARCHAR},
       ky_date = #{kyDate,jdbcType=DATE},
       jj_time = #{jjTime,jdbcType=TIMESTAMP},
+      af_time = #{afTime,jdbcType=TIMESTAMP},
       kyks_time = #{kyksTime,jdbcType=TIMESTAMP},
       kyjs_time = #{kyjsTime,jdbcType=TIMESTAMP},
       xcfx = #{xcfx,jdbcType=VARCHAR},
@@ -979,6 +1021,9 @@
   <update id="updateByPrimaryKey" parameterType="com.easyfly.main.bean.PbsRecord" >
     update pbs_record
     set record_no = #{recordNo,jdbcType=VARCHAR},
+      record_ky_no = #{recordKyNo,jdbcType=VARCHAR},
+      record_jj_no = #{recordJjNo,jdbcType=VARCHAR},
+      record_aj_no = #{recordAjNo,jdbcType=VARCHAR},
       uuid = #{uuid,jdbcType=VARCHAR},
       kyr_name = #{kyrName,jdbcType=VARCHAR},
       ky_unit_name = #{kyUnitName,jdbcType=VARCHAR},
@@ -1001,6 +1046,7 @@
       xcwd = #{xcwd,jdbcType=VARCHAR},
       ky_date = #{kyDate,jdbcType=DATE},
       jj_time = #{jjTime,jdbcType=TIMESTAMP},
+      af_time = #{afTime,jdbcType=TIMESTAMP},
       kyks_time = #{kyksTime,jdbcType=TIMESTAMP},
       kyjs_time = #{kyjsTime,jdbcType=TIMESTAMP},
       xcfx = #{xcfx,jdbcType=VARCHAR},

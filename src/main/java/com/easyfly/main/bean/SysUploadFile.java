@@ -23,6 +23,10 @@ public class SysUploadFile {
 
     private String thumbnailUrl;
 
+    private Integer enablePrint;
+
+    private Integer printOrder;
+
     public Integer getFileId() {
         return fileId;
     }
@@ -101,5 +105,21 @@ public class SysUploadFile {
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl == null ? null : thumbnailUrl.trim();
+    }
+
+    public Integer getEnablePrint() {
+        return enablePrint;
+    }
+
+    public void setEnablePrint(Integer enablePrint) {
+        this.enablePrint = enablePrint;
+    }
+
+    public Integer getPrintOrder() {
+        return printOrder;
+    }
+
+    public void setPrintOrder(Integer printOrder) {
+        this.printOrder = printOrder;
     }
 }

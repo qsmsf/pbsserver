@@ -12,10 +12,12 @@
     <result column="file_type" property="fileType" jdbcType="INTEGER" />
     <result column="rec_uuid" property="recUuid" jdbcType="VARCHAR" />
     <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR" />
+    <result column="enable_print" property="enablePrint" jdbcType="INTEGER" />
+    <result column="print_order" property="printOrder" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     file_id, file_name, file_hint, file_url, file_uploader, file_upload_time, record_id, 
-    file_type, rec_uuid, thumbnail_url
+    file_type, rec_uuid, thumbnail_url, enable_print, print_order
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -42,11 +44,11 @@
     insert into sys_upload_file (file_id, file_name, file_hint, 
       file_url, file_uploader, file_upload_time, 
       record_id, file_type, rec_uuid, 
-      thumbnail_url)
+      thumbnail_url, enable_print, print_order)
     values (#{fileId,jdbcType=INTEGER}, #{fileName,jdbcType=VARCHAR}, #{fileHint,jdbcType=VARCHAR}, 
       #{fileUrl,jdbcType=VARCHAR}, #{fileUploader,jdbcType=VARCHAR}, #{fileUploadTime,jdbcType=TIMESTAMP}, 
       #{recordId,jdbcType=INTEGER}, #{fileType,jdbcType=INTEGER}, #{recUuid,jdbcType=VARCHAR}, 
-      #{thumbnailUrl,jdbcType=VARCHAR})
+      #{thumbnailUrl,jdbcType=VARCHAR}, #{enablePrint,jdbcType=INTEGER}, #{printOrder,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.easyfly.main.bean.SysUploadFile" useGeneratedKeys="true" keyProperty="fileId">
     insert into sys_upload_file
@@ -77,6 +79,12 @@
       </if>
       <if test="thumbnailUrl != null" >
         thumbnail_url,
+      </if>
+      <if test="enablePrint != null" >
+        enable_print,
+      </if>
+      <if test="printOrder != null" >
+        print_order,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -110,6 +118,12 @@
       <if test="thumbnailUrl != null" >
         #{thumbnailUrl,jdbcType=VARCHAR},
       </if>
+      <if test="enablePrint != null" >
+        #{enablePrint,jdbcType=INTEGER},
+      </if>
+      <if test="printOrder != null" >
+        #{printOrder,jdbcType=INTEGER},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.easyfly.main.bean.SysUploadFile" >
@@ -142,6 +156,12 @@
       <if test="thumbnailUrl != null" >
         thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
       </if>
+      <if test="enablePrint != null" >
+        enable_print = #{enablePrint,jdbcType=INTEGER},
+      </if>
+      <if test="printOrder != null" >
+        print_order = #{printOrder,jdbcType=INTEGER},
+      </if>
     </set>
     where file_id = #{fileId,jdbcType=INTEGER}
   </update>
@@ -155,7 +175,9 @@
       record_id = #{recordId,jdbcType=INTEGER},
       file_type = #{fileType,jdbcType=INTEGER},
       rec_uuid = #{recUuid,jdbcType=VARCHAR},
-      thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR}
+      thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+      enable_print = #{enablePrint,jdbcType=INTEGER},
+      print_order = #{printOrder,jdbcType=INTEGER}
     where file_id = #{fileId,jdbcType=INTEGER}
   </update>
 </mapper>
