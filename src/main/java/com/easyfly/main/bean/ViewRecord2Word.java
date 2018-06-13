@@ -7,6 +7,12 @@ public class ViewRecord2Word {
 
     private String recordNo;
 
+    private String recordKyNo;
+
+    private String recordJjNo;
+
+    private String recordAjNo;
+
     private String uuid;
 
     private String kyrName;
@@ -36,6 +42,8 @@ public class ViewRecord2Word {
     private Date kyDate;
 
     private Date jjTime;
+
+    private Date afTime;
 
     private Date kyksTime;
 
@@ -461,5 +469,37 @@ public class ViewRecord2Word {
 
     public void setModelUrl(String modelUrl) {
         this.modelUrl = modelUrl == null ? null : modelUrl.trim();
+    }
+
+    public String getRecordKyNo() {
+        return recordKyNo;
+    }
+
+    public void setRecordKyNo(String recordKyNo) {
+        this.recordKyNo = recordKyNo;
+    }
+
+    public String getRecordJjNo() {
+        return recordJjNo;
+    }
+
+    public void setRecordJjNo(String recordJjNo) {
+        this.recordJjNo = recordJjNo;
+    }
+
+    public String getRecordAjNo() {
+        return recordAjNo;
+    }
+
+    public void setRecordAjNo(String recordAjNo) {
+        this.recordAjNo = recordAjNo;
+    }
+
+    public Date getAfTime() {
+        return afTime;
+    }
+
+    public void setAfTime(Date afTime) {
+        this.afTime = afTime;
     }
 }

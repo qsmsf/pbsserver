@@ -121,7 +121,7 @@ public class UploadFileController extends BaseController {
         }else if(part.getSubmittedFileName().equals(uuid+"_pmt.jpeg")){
             fileInfo.setFileType(2008);
         }else{
-            fileInfo.setFileType(2005);
+            fileInfo.setFileType(2001);
         }
         fileInfo.setFileUploadTime(new Date());
         fileInfo.setRecUuid(uuid);
@@ -145,7 +145,7 @@ public class UploadFileController extends BaseController {
 //            fileInfo.setFileHint(part.getSubmittedFileName());
             fileInfo.setFileUploader("1");
             String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
-            fileInfo.setFileUrl(basePath+"/uploadFiles/downloadFile?fileName="+part.getSubmittedFileName());
+            fileInfo.setFileUrl(basePath+"/uploadFiles/downloadFile?fileName="+fileInfo.getFileName());
 
             fileInfo.setThumbnailUrl(fileInfo.getFileUrl());
         }else{
