@@ -93,9 +93,9 @@
         <dependency>
             <groupId>com.xinghuo</groupId>
             <artifactId>xinghuo-paas-sdk</artifactId>
-            <version>1.8</version>
+            <version>1.8.2</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/xinghuo-paas-sdk-1.8.jar</systemPath>
+            <systemPath>${project.basedir}/lib/xinghuo-paas-sdk-1.8.2.jar</systemPath>
         </dependency>
 
         <dependency>

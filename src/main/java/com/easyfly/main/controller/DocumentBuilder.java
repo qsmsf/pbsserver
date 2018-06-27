@@ -1,15 +1,15 @@
 package com.easyfly.main.controller;
 
-import com.easyfly.main.bean.PbsRecordWithBLOBs;
-import com.easyfly.main.bean.RectSize;
-import com.easyfly.main.bean.SysUploadFile;
-import com.easyfly.main.bean.ViewRecord2WordWithBLOBs;
+import cn.gov.szga.s3.UpoladFileResponse;
+import cn.gov.szga.s3.UpoladFlieRequest;
+import com.easyfly.main.bean.*;
 import com.easyfly.main.dao.PbsRecordMapper;
 import com.easyfly.main.dao.SysUploadFileMapper;
 import com.easyfly.main.dao.ViewRecord2WordMapper;
 import com.easyfly.main.util.CommonUtils;
 import com.easyfly.main.util.Constant;
 import com.easyfly.main.util.CustomXWPFDocument;
+import com.easyfly.main.util.JSONUtil;
 import org.apache.poi.POIXMLDocument;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.*;
@@ -40,6 +40,8 @@ public class DocumentBuilder {
     private SysUploadFileMapper sysUploadFileMapper;
     @Autowired
     private PbsRecordMapper pbsRecordMapper;
+    @Autowired
+    private MyProps myProps;
 
     @Async
     public void wordBuild(int recId, String filePath) throws IOException{
@@ -52,19 +54,18 @@ public class DocumentBuilder {
 
     /**读取并操作word2007中的内容*/
     public int readwriteWord(String filePath ,ViewRecord2WordWithBLOBs record, List<SysUploadFile> fileList) throws IOException{
-        String fileName = filePath + record.getRecordNo()+".docx";
+        String fileName = "";
+        if (record.getDocUrl() != null || !record.getDocUrl().equals("")) {
+            logger.warn("doc has exist. rec_no = " + record.getRecordNo());
+            return 1;
+        }
+        fileName = filePath + record.getRecordNo() + ".docx";
         //调试
         //fileName = filePath+ "model - 副本.docx";
-        File src = new File(filePath+ "model.docx");
-        File destFile = new File (fileName);
+        File src = new File(filePath + "model.docx");
+        File destFile = new File(fileName);
         CommonUtils.copyFileUsingFileChannels(src, destFile);
 
-        //CommonUtils.copyFile(filePath+ "model.docx", fileName);
-        File isExist = new File(fileName);
-        /**判断源文件是否存在*/
-        if(!isExist.exists()){
-            return  1;//"源文件不存在！";
-        }
         int xctNum = 0;
         int pmtNum = 0;
         int picNum = 0;
@@ -771,13 +772,27 @@ public class DocumentBuilder {
             }
             logger.info("finish build word rec_id = "+record.getRecordId());
 
-            //文件上传服务器
-
             //更新主记录docx下载地址
             PbsRecordWithBLOBs rec = new PbsRecordWithBLOBs();
             rec.setRecordId(record.getRecordId());
             rec.setRecState(1005);
-            rec.setDocUrl(Constant.SERVER_URL + "uploadFiles/downloadFile?fileName="+record.getRecordNo()+"_rsl.docx");
+
+            //文件上传服务器
+            if (!myProps.getDebugMode()){
+                UpoladFlieRequest request = new UpoladFlieRequest("appID","secretKey");
+                File resultFile = new File(downloadPath);
+                String resp = request.sendFileObjRequest(resultFile);
+                UpoladFileResponse result = JSONUtil.parseObject(resp, UpoladFileResponse.class);
+                if(result.getCode().equals(200)){
+                    UploadFileResultBean upFile = JSONUtil.parseObject(result.getResult(), UploadFileResultBean.class);
+                    rec.setDocUrl(upFile.getFile_url());
+                }else{
+                    logger.error("文件后台上传失败, errorCode=" + result.getCode());
+                }
+            }else{
+                rec.setDocUrl(Constant.SERVER_URL + "uploadFiles/downloadFile?fileName="+record.getRecordNo()+"_rsl.docx");
+            }
+
             int rsl = pbsRecordMapper.updateWordUrlInfo(rec);
             return  0; //"文件转换成功！路径为："+downloadPath;
         } catch (Exception e) {

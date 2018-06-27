@@ -103,6 +103,16 @@ public class ViewRecord2Word {
 
     private String modelUrl;
 
+    private String docUrl;
+
+    public String getDocUrl() {
+        return docUrl;
+    }
+
+    public void setDocUrl(String docUrl) {
+        this.docUrl = docUrl;
+    }
+
     public Integer getRecordId() {
         return recordId;
     }

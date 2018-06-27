@@ -152,18 +152,17 @@ public class UploadFileController extends BaseController {
             //公安内网
             FileInputStream fis = (FileInputStream) (is);
             LoginUserInfo user = getCurrentUser();
-            UpoladFlieRequest request = new UpoladFlieRequest(user.getToken());
-            UpoladFileResponse response = request.sendFileStreamRequest(fis ,APPCODE ,part.getSubmittedFileName());
-            if(!response.isSuccess()){
-                return setReturnJson(CodeMsg.C703_MSG, CodeMsg.C703);
-            }
-            UploadFileResultBean result = JSONUtil.parseObject(response.getResult(), UploadFileResultBean.class);
+            UpoladFlieRequest request = new UpoladFlieRequest("", "");
+            String resp = request.sendFileStreamRequest(fis ,part.getSubmittedFileName());
+            UpoladFileResponse result = JSONUtil.parseObject(resp, UpoladFileResponse.class);
 
+            UploadFileResultBean upFile = JSONUtil.parseObject(result.getResult(), UploadFileResultBean.class);
+            //result
             //SysUploadFile fileInfo = new SysUploadFile();
-            fileInfo.setFileName(result.getKey());
+            fileInfo.setFileName(upFile.getKey());
             fileInfo.setFileUploader(user.getUserCode());
-            fileInfo.setFileUrl(result.getFile_url());
-            fileInfo.setThumbnailUrl(result.getFile_url());
+            fileInfo.setFileUrl(upFile.getFile_url());
+            fileInfo.setThumbnailUrl(upFile.getFile_url());
         }
 
         //本地测试

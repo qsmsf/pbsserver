@@ -52,6 +52,7 @@
     <result column="model_id" property="modelId" jdbcType="INTEGER" />
     <result column="model_name" property="modelName" jdbcType="VARCHAR" />
     <result column="model_url" property="modelUrl" jdbcType="VARCHAR" />
+    <result column="doc_url" property="docUrl" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.easyfly.main.bean.ViewRecord2WordWithBLOBs" extends="BaseResultMap" >
     <result column="kysy" property="kysy" jdbcType="LONGVARCHAR" />
@@ -62,7 +63,7 @@
     fsqy, xcwz, xczb, xctq, xcsd, xcwd, ky_date, jj_time, af_time, kyks_time, kyjs_time, xcfx,
     xcgz, xczk, bh_flag, bhr_name, bhr_unit_name, bhr_zw, bdyy, bhfs, jzr_name, jzr_sex, 
     jzr_birth, jzr_address, zhr_name, zhr_unit_name, zhr_zw, blr_name, ztr_name, zxr_name, 
-    lxr_name, lyr_name, jjr_other, sh_unit_name, shyj, model_id, model_name, model_url
+    lxr_name, lyr_name, jjr_other, sh_unit_name, shyj, model_id, model_name, model_url, doc_url
   </sql>
   <sql id="Blob_Column_List" >
     kysy, xcms
