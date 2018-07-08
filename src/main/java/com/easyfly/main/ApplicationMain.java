@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -23,8 +24,9 @@ import javax.servlet.MultipartConfigElement;
 @EnableTransactionManagement
 @EnableCircuitBreaker
 @EnableAsync
-public class ApplicationMain {
+public class ApplicationMain extends SpringBootServletInitializer {
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	public static void main(String[] args) {
 		SpringApplication.run(ApplicationMain.class, args);
     }
@@ -51,21 +53,21 @@ public class ApplicationMain {
 	 * filter
 	 * @return
 	 */
-/*
+
 	@Bean
 	public FilterRegistrationBean chkFilterRegistration(){
 		FilterRegistrationBean bean = new FilterRegistrationBean();
-
+		logger.trace("**FilterRegistrationBean**");
 		bean.setFilter(new SecurityFilter());
 		bean.addUrlPatterns("/*");
-		bean.addInitParameter("ignorePath", "/ssoclient/*|/images/*|/themes/*|*.css|*.js|*.png|*.jpg|*.gif|*.bmp|/common/*");
+		bean.addInitParameter("ignorePath", "/ssoclient/*|/images/*|/themes/*|*.csa2s|*.js|*.png|*.jpg|*.gif|*.bmp|/common/*");
 		bean.addInitParameter("ssoBaseEndpoint", "http://172.19.255.66:80/sso");
 		bean.addInitParameter("clientSecret", "clientkey");
 //		bean.setOrder(1);
 		System.out.println("---------->");
 		return bean;
 	}
-*/
+
 	/**
 	 * servlet
 	 * @return
@@ -84,9 +86,10 @@ public class ApplicationMain {
 		factory.setMaxRequestSize("204800KB");
 		return factory.createMultipartConfig();
 	}
-/*
+
 	@Bean
 	public ServletRegistrationBean chkServletRegistration(){
+		logger.trace("**ServletRegistrationBean**");
 		ServletRegistrationBean bean = new ServletRegistrationBean();
 		bean.setServlet(new MySSOLoginServlet());
 		bean.addInitParameter("ssoBaseEndpoint", "http://172.19.255.66:80/sso");
@@ -110,5 +113,5 @@ public class ApplicationMain {
 		bean.addUrlMappings("/ssoclient/*");
 		return bean;
 	}
-*/
+
 }

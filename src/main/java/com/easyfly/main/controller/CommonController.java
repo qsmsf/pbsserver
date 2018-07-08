@@ -10,6 +10,7 @@ import com.easyfly.main.util.JSONUtil;
 import com.easyfly.main.util.ReturnJSON;
 import com.xinghuo.sso.LoginUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,6 +30,7 @@ public class CommonController extends BaseController {
     @ResponseBody
     @RequestMapping("/getInitInfo")
     @CrossOrigin
+    @Transactional
     public ReturnJSON getInitInfo() {
         if(myProps.getDebugMode()){
             InitInfoBean rsl = new InitInfoBean();
@@ -134,6 +136,7 @@ public class CommonController extends BaseController {
     @ResponseBody
     @RequestMapping("/getInitInfoTest")
     @CrossOrigin
+    @Transactional
     public ReturnJSON getInitInfoTest() {
 //测试用
         InitInfoBean rsl = new InitInfoBean();

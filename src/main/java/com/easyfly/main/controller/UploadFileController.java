@@ -41,6 +41,7 @@ public class UploadFileController extends BaseController {
     @CrossOrigin
     @ResponseBody
     @RequestMapping("/getRecordFileList")
+    @Transactional
     public ReturnJSON getRecordFileList(){
         String uuid = getHeader("uuid");
         if(uuid.equals("")){
@@ -54,6 +55,7 @@ public class UploadFileController extends BaseController {
     @CrossOrigin
     @ResponseBody
     @RequestMapping("/getFileInfo")
+    @Transactional
     public ReturnJSON getFileInfo() {
         int fileId =  Integer.parseInt(getParam());
         SysUploadFile result = sysUploadFileMapper.selectByPrimaryKey(fileId);

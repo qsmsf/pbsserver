@@ -72,6 +72,7 @@ public class RecordsController extends BaseController {
     )
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
+    @Transactional
     public ReturnJSON getRecentRecordList() {
         //{"kyDateBegin":"2017-12-15","kyDateEnd":"2017-12-15","kyUnitId":1,"kyrName":"马","limit":10,"offset":0,"recState":1001,"recordNo":"300","recordTitle":"kk"}
         RecordFilterBean filter = JSONUtil.parseObject(getParameter("filter"),RecordFilterBean.class);
@@ -93,6 +94,7 @@ public class RecordsController extends BaseController {
     @CrossOrigin
     @ResponseBody
     @RequestMapping("/getRecordDetail")
+    @Transactional
     public ReturnJSON getRecord() {
         int recId =  Integer.parseInt(getHeader("recId"));
         PbsRecord pr = pbsRecordMapper.selectByPrimaryKey(recId);
