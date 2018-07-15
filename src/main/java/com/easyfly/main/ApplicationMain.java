@@ -1,6 +1,5 @@
 package com.easyfly.main;
-import cn.gov.szga.sso.filter.SecurityFilter;
-import com.easyfly.main.sso.MySSOLoginServlet;
+
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,19 +53,19 @@ public class ApplicationMain extends SpringBootServletInitializer {
 	 * @return
 	 */
 
-	@Bean
-	public FilterRegistrationBean chkFilterRegistration(){
-		FilterRegistrationBean bean = new FilterRegistrationBean();
-		logger.trace("**FilterRegistrationBean**");
-		bean.setFilter(new SecurityFilter());
-		bean.addUrlPatterns("/*");
-		bean.addInitParameter("ignorePath", "/ssoclient/*|/images/*|/themes/*|*.csa2s|*.js|*.png|*.jpg|*.gif|*.bmp|/common/*");
-		bean.addInitParameter("ssoBaseEndpoint", "http://172.19.255.66:80/sso");
-		bean.addInitParameter("clientSecret", "clientkey");
-//		bean.setOrder(1);
-		System.out.println("---------->");
-		return bean;
-	}
+//	@Bean
+//	public FilterRegistrationBean chkFilterRegistration(){
+//		FilterRegistrationBean bean = new FilterRegistrationBean();
+//		logger.trace("**FilterRegistrationBean**");
+//		bean.setFilter(new SecurityFilter());
+//		bean.addUrlPatterns("/*");
+//		bean.addInitParameter("ignorePath", "/ssoclient/*|/images/*|/themes/*|*.csa2s|*.js|*.png|*.jpg|*.gif|*.bmp|/common/*");
+//		bean.addInitParameter("ssoBaseEndpoint", "http://172.19.255.66:80/sso");
+//		bean.addInitParameter("clientSecret", "1c1b9b9f1793e5ee31efa6f964be9edb");
+////		bean.setOrder(1);
+//		System.out.println("---------->");
+//		return bean;
+//	}
 
 	/**
 	 * servlet
@@ -87,31 +86,5 @@ public class ApplicationMain extends SpringBootServletInitializer {
 		return factory.createMultipartConfig();
 	}
 
-	@Bean
-	public ServletRegistrationBean chkServletRegistration(){
-		logger.trace("**ServletRegistrationBean**");
-		ServletRegistrationBean bean = new ServletRegistrationBean();
-		bean.setServlet(new MySSOLoginServlet());
-		bean.addInitParameter("ssoBaseEndpoint", "http://172.19.255.66:80/sso");
-//		sso  Web登录地址 结尾不要带 /
-		bean.addInitParameter("oauthUserAuthorizationUri", "http://172.19.255.66:80/sso/oauth2/authorize");
-//		获取token信息地址 结尾不要带 /
-		bean.addInitParameter("oauth2TokenCheckEndpoint", "http://172.19.255.66:80/sso/oauth2/tokeninfo");
-
-		 // 本网站的首页地址,请修改为自己的系统URL地址
-
-		bean.addInitParameter("webSourceEndpoint", "http://localhost:8080/");
-
-		// client  -->应用clientId
-
-		bean.addInitParameter("clientId", "client");
-
-		 // clientkey -- > 应用secret
-
-		bean.addInitParameter("clientSecret", "clientkey");
-		
-		bean.addUrlMappings("/ssoclient/*");
-		return bean;
-	}
 
 }

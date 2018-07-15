@@ -1,6 +1,5 @@
 package com.easyfly.main.bean;
 
-import cn.gov.szga.sso.bean.LoginInfo;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,24 +1,18 @@
 package com.easyfly.main.controller;
 
-import cn.gov.szga.s3.UpoladFileResponse;
-import cn.gov.szga.s3.UpoladFlieRequest;
-import com.alibaba.fastjson.JSON;
 import com.easyfly.main.base.controller.BaseController;
 import com.easyfly.main.bean.MyProps;
 import com.easyfly.main.bean.SysUploadFile;
-import com.easyfly.main.bean.UploadFileResultBean;
 import com.easyfly.main.dao.SysUploadFileMapper;
 import com.easyfly.main.util.CodeMsg;
 import com.easyfly.main.util.JSONUtil;
 import com.easyfly.main.util.ReturnJSON;
-import com.xinghuo.sso.LoginUserInfo;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
@@ -68,9 +62,12 @@ public class UploadFileController extends BaseController {
     @Transactional
     @PostMapping("/addFileInfo")
     public ReturnJSON addFileInfo() {
-        SysUploadFile file = getHeaderInJSON(SysUploadFile.class, "file");
+        SysUploadFile file = JSONUtil.parseObject(getParameter("fileInfo"),SysUploadFile.class);
         int rsl = sysUploadFileMapper.insertSelective(file);
-
+        if(rsl != 1){
+            logger.error("插入失败 :  ="+file.getRecUuid());
+            return setReturnJson("插入记录失败", CodeMsg.C701);
+        }
         return setReturnJson("", CodeMsg.C604);
     }
 
@@ -127,8 +124,7 @@ public class UploadFileController extends BaseController {
         }
         fileInfo.setFileUploadTime(new Date());
         fileInfo.setRecUuid(uuid);
-        if(myProps.getDebugMode())
-        {
+
             String pathName = request.getSession().getServletContext().getRealPath("")+"/data/";
             String newFileName = (new Date()).getTime() + "";
             String fileExtType = part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf('.'));
@@ -150,22 +146,6 @@ public class UploadFileController extends BaseController {
             fileInfo.setFileUrl(basePath+"/uploadFiles/downloadFile?fileName="+fileInfo.getFileName());
 
             fileInfo.setThumbnailUrl(fileInfo.getFileUrl());
-        }else{
-            //公安内网
-            FileInputStream fis = (FileInputStream) (is);
-            LoginUserInfo user = getCurrentUser();
-            UpoladFlieRequest request = new UpoladFlieRequest("", "");
-            String resp = request.sendFileStreamRequest(fis ,part.getSubmittedFileName());
-            UpoladFileResponse result = JSONUtil.parseObject(resp, UpoladFileResponse.class);
-
-            UploadFileResultBean upFile = JSONUtil.parseObject(result.getResult(), UploadFileResultBean.class);
-            //result
-            //SysUploadFile fileInfo = new SysUploadFile();
-            fileInfo.setFileName(upFile.getKey());
-            fileInfo.setFileUploader(user.getUserCode());
-            fileInfo.setFileUrl(upFile.getFile_url());
-            fileInfo.setThumbnailUrl(upFile.getFile_url());
-        }
 
         //本地测试
 

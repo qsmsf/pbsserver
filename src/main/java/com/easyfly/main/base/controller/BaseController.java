@@ -1,11 +1,10 @@
 package com.easyfly.main.base.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.xinghuo.core.common.model.json.DataGridReturn;
+//import com.xinghuo.core.common.model.json.DataGridReturn;
 import com.easyfly.main.util.Constant;
 import com.easyfly.main.util.JSONUtil;
 import com.easyfly.main.util.ReturnJSON;
-import com.xinghuo.sso.LoginUserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,9 @@ public class BaseController {
     /**
      * 得到当前请求用户的基本信息
      */
-    public LoginUserInfo getCurrentUser() {
-        return (LoginUserInfo) request.getAttribute(Constant.CURRENT_USER_NAME);
-    }
+//    public LoginUserInfo getCurrentUser() {
+//        return (LoginUserInfo) request.getAttribute(Constant.CURRENT_USER_NAME);
+//    }
 
     /**
      * 得到当前请求用户的基本信息
@@ -100,13 +99,13 @@ public class BaseController {
      *
      * @param pageNum 页码
      */
-    public ReturnJSON setReturnJson(DataGridReturn dataGridReturn, Integer pageNum) {
-        ReturnJSON json = new ReturnJSON();
-        json.setCmd(request.getRequestURI());
-        if (dataGridReturn != null) {
-            dataGridReturn.setMessage(pageNum + "");
-            json.setData(dataGridReturn);
-        }
-        return json;
-    }
+//    public ReturnJSON setReturnJson(DataGridReturn dataGridReturn, Integer pageNum) {
+//        ReturnJSON json = new ReturnJSON();
+//        json.setCmd(request.getRequestURI());
+//        if (dataGridReturn != null) {
+//            dataGridReturn.setMessage(pageNum + "");
+//            json.setData(dataGridReturn);
+//        }
+//        return json;
+//    }
 }

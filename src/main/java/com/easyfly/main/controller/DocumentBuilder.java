@@ -1,7 +1,6 @@
 package com.easyfly.main.controller;
 
-import cn.gov.szga.s3.UpoladFileResponse;
-import cn.gov.szga.s3.UpoladFlieRequest;
+
 import com.easyfly.main.bean.*;
 import com.easyfly.main.dao.PbsRecordMapper;
 import com.easyfly.main.dao.SysUploadFileMapper;
@@ -10,6 +9,13 @@ import com.easyfly.main.util.CommonUtils;
 import com.easyfly.main.util.Constant;
 import com.easyfly.main.util.CustomXWPFDocument;
 import com.easyfly.main.util.JSONUtil;
+import com.szga.xinghuo.api.base.ApiException;
+import com.szga.xinghuo.api.base.DefaultXHClient;
+import com.szga.xinghuo.api.base.XhClient;
+import com.szga.xinghuo.api.base.util.MethodEnum;
+import com.szga.xinghuo.api.base.util.XhHashMap;
+import com.szga.xinghuo.api.request.BaseUploadFileRequest;
+import com.szga.xinghuo.api.response.BaseUpoladFileResponse;
 import org.apache.poi.POIXMLDocument;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.*;
@@ -779,16 +785,47 @@ public class DocumentBuilder {
 
             //文件上传服务器
             if (!myProps.getDebugMode()){
-                UpoladFlieRequest request = new UpoladFlieRequest("appID","secretKey");
+                XhClient client = new DefaultXHClient();
+                BaseUploadFileRequest request = new BaseUploadFileRequest();
+                // 设置请求那个服务
+                request.setServiceName("xinghuo-apaas-fileservice");
+                // 设置请求那个接口
+                request.setInterfaceName("breakMultiUploads");
+                // 设置用什么方式请求 ，目前支持四种请求：post ,get ,put ,delete
+                request.setMethod(MethodEnum.REQUEST_Method_POST);
+                // 设置请求协议，http 或者是 HTTPS，默认是http协议请求
+                request.setRequestHttpType(MethodEnum.REQUEST_HTTP_TYPE);
+                // 设置请求头参数
+                Map<String, String> headerMap = new XhHashMap();
+                // 这里可以自己定义
+                request.setHeaderMap(headerMap);
+                // 设置接口参数
+                Map<String, String> params = new XhHashMap();
+                request.setParamMap(params);
+                List<File> list = new ArrayList<File>();
                 File resultFile = new File(downloadPath);
-                String resp = request.sendFileObjRequest(resultFile);
-                UpoladFileResponse result = JSONUtil.parseObject(resp, UpoladFileResponse.class);
-                if(result.getCode().equals(200)){
-                    UploadFileResultBean upFile = JSONUtil.parseObject(result.getResult(), UploadFileResultBean.class);
-                    rec.setDocUrl(upFile.getFile_url());
-                }else{
-                    logger.error("文件后台上传失败, errorCode=" + result.getCode());
+
+                list.add(resultFile);
+                //设置文件元数据
+                request.setFileList(list);
+                try {
+                    // 开始调用接口
+                    BaseUpoladFileResponse response = client.execute(request, System.currentTimeMillis());
+                    System.out.println(response.getBody());
+
+                } catch (ApiException e) {
+                    e.printStackTrace();
                 }
+//                UpoladFlieRequest request = new UpoladFlieRequest("appID","secretKey");
+//                File resultFile = new File(downloadPath);
+//                String resp = request.sendFileObjRequest(resultFile);
+//                UpoladFileResponse result = JSONUtil.parseObject(resp, UpoladFileResponse.class);
+//                if(result.getCode().equals(200)){
+//                    UploadFileResultBean upFile = JSONUtil.parseObject(result.getResult(), UploadFileResultBean.class);
+//                    rec.setDocUrl(upFile.getFile_url());
+//                }else{
+//                    logger.error("文件后台上传失败, errorCode=" + result.getCode());
+//                }
             }else{
                 rec.setDocUrl(Constant.SERVER_URL + "uploadFiles/downloadFile?fileName="+record.getRecordNo()+"_rsl.docx");
             }
