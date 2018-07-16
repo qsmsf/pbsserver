@@ -2,6 +2,8 @@ server:
   port: 8081
   tomcat.uri-encoding: UTF-8
 
+application.name: pbsserver
+
 hystrix:
   command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
 
@@ -37,6 +39,14 @@ pagehelper:
     reasonable: true
     supportMethodsArguments: true
     params: count=countSql
+
+eureka:
+  instance.prefer-ip-address: true
+  client.healthcheck.enabled: true
+
+management:
+  security:
+    enabled: false
 
 myProps:
   debugMode: true
