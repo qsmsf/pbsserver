@@ -1,19 +1,18 @@
 package com.easyfly.main.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.easyfly.main.bean.*;
 import com.easyfly.main.dao.PbsRecordMapper;
 import com.easyfly.main.dao.SysUploadFileMapper;
 import com.easyfly.main.dao.ViewRecord2WordMapper;
-import com.easyfly.main.util.CommonUtils;
-import com.easyfly.main.util.Constant;
-import com.easyfly.main.util.CustomXWPFDocument;
-import com.easyfly.main.util.JSONUtil;
+import com.easyfly.main.util.*;
 import com.szga.xinghuo.api.base.ApiException;
 import com.szga.xinghuo.api.base.DefaultXHClient;
 import com.szga.xinghuo.api.base.XhClient;
 import com.szga.xinghuo.api.base.util.MethodEnum;
 import com.szga.xinghuo.api.base.util.XhHashMap;
+import com.szga.xinghuo.api.domain.BaseUpoladFileBean;
 import com.szga.xinghuo.api.request.BaseUploadFileRequest;
 import com.szga.xinghuo.api.response.BaseUpoladFileResponse;
 import org.apache.poi.POIXMLDocument;
@@ -33,7 +32,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
-import static com.sun.tools.doclint.Entity.image;
 
 @Component
 public class DocumentBuilder {
@@ -785,47 +783,21 @@ public class DocumentBuilder {
 
             //文件上传服务器
             if (!myProps.getDebugMode()){
-                XhClient client = new DefaultXHClient();
-                BaseUploadFileRequest request = new BaseUploadFileRequest();
-                // 设置请求那个服务
-                request.setServiceName("xinghuo-apaas-fileservice");
-                // 设置请求那个接口
-                request.setInterfaceName("breakMultiUploads");
-                // 设置用什么方式请求 ，目前支持四种请求：post ,get ,put ,delete
-                request.setMethod(MethodEnum.REQUEST_Method_POST);
-                // 设置请求协议，http 或者是 HTTPS，默认是http协议请求
-                request.setRequestHttpType(MethodEnum.REQUEST_HTTP_TYPE);
-                // 设置请求头参数
-                Map<String, String> headerMap = new XhHashMap();
-                // 这里可以自己定义
-                request.setHeaderMap(headerMap);
-                // 设置接口参数
-                Map<String, String> params = new XhHashMap();
-                request.setParamMap(params);
-                List<File> list = new ArrayList<File>();
+
                 File resultFile = new File(downloadPath);
-
-                list.add(resultFile);
-                //设置文件元数据
-                request.setFileList(list);
-                try {
-                    // 开始调用接口
-                    BaseUpoladFileResponse response = client.execute(request, System.currentTimeMillis());
-                    System.out.println(response.getBody());
-
-                } catch (ApiException e) {
-                    e.printStackTrace();
+                BaseUpoladFileBean resp = UploadUtil.uploadToXh(rec.getUuid(), resultFile);
+                if(resp.getSuccess()){
+                    List<UploadFileResultBean> rslList = JSON.parseArray(resp.getResult(), UploadFileResultBean.class);
+                    if(rslList.size() > 0){
+                        rec.setDocUrl(rslList.get(0).getData().getFileUrl());
+                    }else{
+                        logger.error("upload file error 1");
+                        return 1;
+                    }
+                }else{
+                    logger.error("upload file error msg: " + resp.getMessage());
+                    return 2;
                 }
-//                UpoladFlieRequest request = new UpoladFlieRequest("appID","secretKey");
-//                File resultFile = new File(downloadPath);
-//                String resp = request.sendFileObjRequest(resultFile);
-//                UpoladFileResponse result = JSONUtil.parseObject(resp, UpoladFileResponse.class);
-//                if(result.getCode().equals(200)){
-//                    UploadFileResultBean upFile = JSONUtil.parseObject(result.getResult(), UploadFileResultBean.class);
-//                    rec.setDocUrl(upFile.getFile_url());
-//                }else{
-//                    logger.error("文件后台上传失败, errorCode=" + result.getCode());
-//                }
             }else{
                 rec.setDocUrl(Constant.SERVER_URL + "uploadFiles/downloadFile?fileName="+record.getRecordNo()+"_rsl.docx");
             }
@@ -837,4 +809,5 @@ public class DocumentBuilder {
         }
         return 0 ;
     }
+
 }

@@ -3,9 +3,9 @@
 <mapper namespace="com.easyfly.main.dao.SysUploadFileMapper" >
   <resultMap id="BaseResultMap" type="com.easyfly.main.bean.SysUploadFile" >
     <id column="file_id" property="fileId" jdbcType="INTEGER" />
-    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="fileName" property="fileName" jdbcType="VARCHAR" />
     <result column="file_hint" property="fileHint" jdbcType="VARCHAR" />
-    <result column="file_url" property="fileUrl" jdbcType="VARCHAR" />
+    <result column="fileUrl" property="fileUrl" jdbcType="VARCHAR" />
     <result column="file_uploader" property="fileUploader" jdbcType="VARCHAR" />
     <result column="file_upload_time" property="fileUploadTime" jdbcType="TIMESTAMP" />
     <result column="record_id" property="recordId" jdbcType="INTEGER" />
@@ -16,7 +16,7 @@
     <result column="print_order" property="printOrder" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    file_id, file_name, file_hint, file_url, file_uploader, file_upload_time, record_id, 
+    file_id, fileName, file_hint, fileUrl, file_uploader, file_upload_time, record_id,
     file_type, rec_uuid, thumbnail_url, enable_print, print_order
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -41,8 +41,8 @@
     where file_id = #{fileId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.easyfly.main.bean.SysUploadFile" >
-    insert into sys_upload_file (file_id, file_name, file_hint, 
-      file_url, file_uploader, file_upload_time, 
+    insert into sys_upload_file (file_id, fileName, file_hint,
+      fileUrl, file_uploader, file_upload_time,
       record_id, file_type, rec_uuid, 
       thumbnail_url, enable_print, print_order)
     values (#{fileId,jdbcType=INTEGER}, #{fileName,jdbcType=VARCHAR}, #{fileHint,jdbcType=VARCHAR}, 
@@ -54,13 +54,13 @@
     insert into sys_upload_file
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="fileName != null" >
-        file_name,
+        fileName,
       </if>
       <if test="fileHint != null" >
         file_hint,
       </if>
       <if test="fileUrl != null" >
-        file_url,
+        fileUrl,
       </if>
       <if test="fileUploader != null" >
         file_uploader,
@@ -130,13 +130,13 @@
     update sys_upload_file
     <set >
       <if test="fileName != null" >
-        file_name = #{fileName,jdbcType=VARCHAR},
+        fileName = #{fileName,jdbcType=VARCHAR},
       </if>
       <if test="fileHint != null" >
         file_hint = #{fileHint,jdbcType=VARCHAR},
       </if>
       <if test="fileUrl != null" >
-        file_url = #{fileUrl,jdbcType=VARCHAR},
+        fileUrl = #{fileUrl,jdbcType=VARCHAR},
       </if>
       <if test="fileUploader != null" >
         file_uploader = #{fileUploader,jdbcType=VARCHAR},
@@ -167,9 +167,9 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.easyfly.main.bean.SysUploadFile" >
     update sys_upload_file
-    set file_name = #{fileName,jdbcType=VARCHAR},
+    set fileName = #{fileName,jdbcType=VARCHAR},
       file_hint = #{fileHint,jdbcType=VARCHAR},
-      file_url = #{fileUrl,jdbcType=VARCHAR},
+      fileUrl = #{fileUrl,jdbcType=VARCHAR},
       file_uploader = #{fileUploader,jdbcType=VARCHAR},
       file_upload_time = #{fileUploadTime,jdbcType=TIMESTAMP},
       record_id = #{recordId,jdbcType=INTEGER},

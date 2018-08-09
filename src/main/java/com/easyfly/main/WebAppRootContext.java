@@ -25,7 +25,7 @@ public class WebAppRootContext implements ServletContextInitializer{
 /*
 * 服务端口(注：默认是8080)
 */
-        servletContext.setInitParameter("serverPort", "8082");
+        servletContext.setInitParameter("serverPort", "8081");
 /*
 * 服务密钥
 */
@@ -37,6 +37,6 @@ public class WebAppRootContext implements ServletContextInitializer{
 /*
 * 运行模式:dev 开发模式,prod 生产模式,test 测试模式,默认是测试模式 test
 */
-        servletContext.setInitParameter("operationMode", "prod");
+        servletContext.setInitParameter("operationMode", "test");
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.szga.xinghuo.api.serviceregistry.EurekaClientInitListener;
-@Configuration
+//@Configuration
 public class WebXMLConfig {
     @Bean
     public ServletListenerRegistrationBean servletListenerRegistrationBean() {

@@ -1,12 +1,23 @@
 package com.easyfly.main.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.easyfly.main.base.controller.BaseController;
 import com.easyfly.main.bean.MyProps;
 import com.easyfly.main.bean.SysUploadFile;
+import com.easyfly.main.bean.UploadFileResultBean;
 import com.easyfly.main.dao.SysUploadFileMapper;
 import com.easyfly.main.util.CodeMsg;
 import com.easyfly.main.util.JSONUtil;
 import com.easyfly.main.util.ReturnJSON;
+import com.easyfly.main.util.UploadUtil;
+import com.szga.xinghuo.api.base.ApiException;
+import com.szga.xinghuo.api.base.DefaultXHClient;
+import com.szga.xinghuo.api.base.XhClient;
+import com.szga.xinghuo.api.base.util.MethodEnum;
+import com.szga.xinghuo.api.base.util.XhHashMap;
+import com.szga.xinghuo.api.domain.BaseUpoladFileBean;
+import com.szga.xinghuo.api.request.BaseUploadFileRequest;
+import com.szga.xinghuo.api.response.BaseUpoladFileResponse;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +29,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.*;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/uploadFiles")
@@ -103,9 +113,9 @@ public class UploadFileController extends BaseController {
     @ResponseBody
     @Transactional
     @PostMapping("/uploadFile")
-    public ReturnJSON uploadFile() throws Exception{
+    public ReturnJSON uploadFile() throws Exception {
         String uuid = getHeader("uuid");
-        if(uuid.equals("")){
+        if (uuid.equals("")) {
             return setReturnJson("主键为空", CodeMsg.C702);
         }
 
@@ -113,43 +123,58 @@ public class UploadFileController extends BaseController {
         InputStream is = part.getInputStream();
         SysUploadFile fileInfo = new SysUploadFile();
 
-        if(part.getSubmittedFileName().equals(uuid+".png")){
+        String pathName = request.getSession().getServletContext().getRealPath("") + "/data/";
+        String newFileName = (new Date()).getTime() + "";
+        String fileExtType = part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf('.'));
+
+        File file = new File(pathName + newFileName + fileExtType);
+        OutputStream os = new FileOutputStream(file);
+        int bytesRead = 0;
+        byte[] buffer = new byte[8192];
+        while ((bytesRead = is.read(buffer, 0, 8192)) != -1) {
+            os.write(buffer, 0, bytesRead);
+        }
+        os.close();
+        is.close();
+
+
+        if (part.getSubmittedFileName().equals(uuid + ".png")) {
             fileInfo.setFileType(2006);
-        }else if(part.getSubmittedFileName().equals(uuid+"_xct.jpeg")){
+        } else if (part.getSubmittedFileName().equals(uuid + "_xct.jpeg")) {
             fileInfo.setFileType(2007);
-        }else if(part.getSubmittedFileName().equals(uuid+"_pmt.jpeg")){
+        } else if (part.getSubmittedFileName().equals(uuid + "_pmt.jpeg")) {
             fileInfo.setFileType(2008);
-        }else{
+        } else {
             fileInfo.setFileType(2001);
         }
         fileInfo.setFileUploadTime(new Date());
         fileInfo.setRecUuid(uuid);
 
-            String pathName = request.getSession().getServletContext().getRealPath("")+"/data/";
-            String newFileName = (new Date()).getTime() + "";
-            String fileExtType = part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf('.'));
+        fileInfo.setFileName(newFileName + fileExtType);
+        fileInfo.setFileUploader("1");
 
-            File file = new File(pathName + newFileName + fileExtType);
-            OutputStream os = new FileOutputStream(file);
-            int bytesRead = 0;
-            byte[] buffer = new byte[8192];
-            while ((bytesRead = is.read(buffer, 0, 8192)) != -1) {
-                os.write(buffer, 0, bytesRead);
-            }
-            os.close();
-            is.close();
-            fileInfo.setFileName(newFileName + fileExtType);
-
-//            fileInfo.setFileHint(part.getSubmittedFileName());
-            fileInfo.setFileUploader("1");
-            String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
-            fileInfo.setFileUrl(basePath+"/uploadFiles/downloadFile?fileName="+fileInfo.getFileName());
+        if (myProps.getDebugMode()){
+    //            fileInfo.setFileHint(part.getSubmittedFileName());
+            String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+            fileInfo.setFileUrl(basePath + "/uploadFiles/downloadFile?fileName=" + fileInfo.getFileName());
 
             fileInfo.setThumbnailUrl(fileInfo.getFileUrl());
-
+        }
         //本地测试
-
-
+        else {
+            BaseUpoladFileBean resp = UploadUtil.uploadToXh(newFileName + fileExtType, file);
+            if(resp.getSuccess()){
+                List<UploadFileResultBean> rslList = JSON.parseArray(resp.getResult(), UploadFileResultBean.class);
+                if(rslList.size() > 0){
+                    fileInfo.setFileUrl(rslList.get(0).getData().getFileUrl());
+                    fileInfo.setThumbnailUrl(rslList.get(0).getData().getFileUrl());
+                }else{
+                    return setReturnJson(CodeMsg.C703_MSG, CodeMsg.C703);
+                }
+            }else{
+                return setReturnJson(CodeMsg.C703_MSG, CodeMsg.C703);
+            }
+        }
         //
         int rsl = sysUploadFileMapper.insertSelective(fileInfo);
         if( rsl != 1){

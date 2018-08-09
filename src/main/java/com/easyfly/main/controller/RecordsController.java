@@ -150,7 +150,11 @@ public class RecordsController extends BaseController {
             return setReturnJson("更新编号失败", CodeMsg.C701);
         }
         for(SysUploadFile fileInfo : fileList){
-            rsl = sysUploadFileMapper.updateByPrimaryKeySelective(fileInfo);
+            if(fileInfo.getFileId() == 0){
+                rsl = sysUploadFileMapper.insertSelective(fileInfo);
+            }else{
+                rsl = sysUploadFileMapper.updateByPrimaryKeySelective(fileInfo);
+            }
         }
         if(record.getRecState() == 1004){
             logger.info("begin to build document...");
@@ -172,7 +176,11 @@ public class RecordsController extends BaseController {
             return setReturnJson("更新记录失败", CodeMsg.C701);
         }
         for(SysUploadFile fileInfo : fileList){
-            rsl = sysUploadFileMapper.updateByPrimaryKeySelective(fileInfo);
+            if(fileInfo.getFileId() == 0){
+                rsl = sysUploadFileMapper.insertSelective(fileInfo);
+            }else{
+                rsl = sysUploadFileMapper.updateByPrimaryKeySelective(fileInfo);
+            }
         }
         if(record.getRecState() == 1004){
             logger.info("begin to build document...");

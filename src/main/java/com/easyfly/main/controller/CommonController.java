@@ -6,6 +6,13 @@ import com.easyfly.main.bean.*;
 import com.easyfly.main.dao.PrivilegeMapper;
 import com.easyfly.main.util.CodeMsg;
 import com.easyfly.main.util.ReturnJSON;
+import com.szga.xinghuo.api.base.ApiException;
+import com.szga.xinghuo.api.base.DefaultXHClient;
+import com.szga.xinghuo.api.base.XhClient;
+import com.szga.xinghuo.api.base.util.MethodEnum;
+import com.szga.xinghuo.api.base.util.XhHashMap;
+import com.szga.xinghuo.api.request.BaseZuulServiceRequest;
+import com.szga.xinghuo.api.response.BaseZuulServiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/common")
@@ -77,4 +86,47 @@ public class CommonController extends BaseController {
 
     }
 
+    private InitInfoBean.LoginUserInfo loginUser (String userId){
+        InitInfoBean.LoginUserInfo userBean = new InitInfoBean.LoginUserInfo();
+        XhClient client = new DefaultXHClient();
+        BaseZuulServiceRequest request = new BaseZuulServiceRequest();
+        //设置请求那个服务
+        request.setServiceName("xinghuo-apaas-useridentifyservice");
+        //设置请求那个接口
+        request.setInterfaceName("services/api/v1/user/info");
+        //设置用什么方式请求 ，目前支持四种请求：post ,get ,put ,delete
+        request.setMethod(MethodEnum.REQUEST_Method_POST);
+        //设置请求协议，http 或者是 HTTPS，默认是http协议请求
+        request.setRequestHttpType(MethodEnum.REQUEST_HTTP_TYPE);
+        //设置请求头参数
+        Map<String, String> headerMap = new XhHashMap();
+        //这里可以自己定义
+        headerMap.put("Content-Type", "application/x-www-form-urlencoded");
+        request.setHeaderMap(headerMap);
+        //设置接口参数
+        Map<String, String> params = new XhHashMap();
+        params.put("loginId", userId);
+        request.setParamMap(params);
+        try {
+            //开始调用接口
+            BaseZuulServiceResponse response = client.execute(request, System.currentTimeMillis());
+            System.out.println(response.getBody());
+
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+        return userBean;
+    }
+
+    private List<OptionBean> getUserList(String userId){
+        List<OptionBean> rslList = new ArrayList<>();
+
+        return rslList;
+    }
+
+    private List<OptionBean> getUnitList( String userId) {
+        List<OptionBean> rslList = new ArrayList<>();
+
+        return rslList;
+    }
 }

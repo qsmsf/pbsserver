@@ -23,7 +23,7 @@ spring:
       charset: UTF-8
       enabled: true
   datasource:
-    url: jdbc:mysql://localhost:3306/pbsserver
+    url: jdbc:mysql://127.0.0.1:3306/pbsserver
     username: rdis
     password: rdis
     driverClassName: com.mysql.jdbc.Driver
