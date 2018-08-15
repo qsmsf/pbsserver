@@ -10,8 +10,7 @@ import com.easyfly.main.util.CodeMsg;
 import com.easyfly.main.util.JSONUtil;
 import com.easyfly.main.util.OfficeUtil;
 import com.easyfly.main.util.ReturnJSON;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,8 +67,11 @@ public class RecordsController extends BaseController {
     @PostMapping("/getRecentRecordList")
     @CrossOrigin
     @ApiOperation(value = "getRecentRecordList",
-            notes = "get record list"
+            notes = "获得最近记录列表"
     )
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="query",name="filter",dataType="String",required=true,value="查询条件的json字符串",defaultValue="")
+    })
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     @Transactional
@@ -95,6 +97,12 @@ public class RecordsController extends BaseController {
     @ResponseBody
     @RequestMapping("/getRecordDetail")
     @Transactional
+    @ApiOperation(value = "getRecordDetail",
+            notes = "获取记录详情"
+    )
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="header",name="recId",dataType="String",required=true,value="记录编号",defaultValue="")
+    })
     public ReturnJSON getRecord() {
         int recId =  Integer.parseInt(getHeader("recId"));
         PbsRecord pr = pbsRecordMapper.selectByPrimaryKey(recId);
@@ -126,6 +134,13 @@ public class RecordsController extends BaseController {
     @CrossOrigin
     @ResponseBody
     @Transactional
+    @ApiOperation(value = "addRecord",
+            notes = "增加记录"
+    )
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="body",name="fileList",dataType="String",required=true,value="文件列表JSON字符串",defaultValue=""),
+            @ApiImplicitParam(paramType="body",name="record",dataType="String",required=true,value="记录信息JSON字符串",defaultValue="")
+    })
     @PostMapping("/addRecord")
     public ReturnJSON addRecord() throws IOException{
         List<SysUploadFile> fileList = JSON.parseArray(getParameter("fileList"), SysUploadFile.class);
@@ -167,6 +182,13 @@ public class RecordsController extends BaseController {
     @ResponseBody
     @Transactional
     @PostMapping("/updateRecord")
+    @ApiOperation(value = "updateRecord",
+            notes = "更新记录"
+    )
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="body",name="fileList",dataType="String",required=true,value="文件列表JSON字符串",defaultValue=""),
+            @ApiImplicitParam(paramType="body",name="record",dataType="String",required=true,value="记录信息JSON字符串",defaultValue="")
+    })
     public ReturnJSON updateRecord() throws IOException{
         List<SysUploadFile> fileList = JSON.parseArray(getParameter("fileList"), SysUploadFile.class);
         PbsRecordWithBLOBs record = JSONUtil.parseObject(getParameter("record") ,PbsRecordWithBLOBs.class);
@@ -193,6 +215,12 @@ public class RecordsController extends BaseController {
     @ResponseBody
     @Transactional
     @PostMapping("/checkRecord")
+    @ApiOperation(value = "checkRecord",
+            notes = "审核记录"
+    )
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="body",name="record",dataType="String",required=true,value="记录信息JSON字符串",defaultValue="")
+    })
     public ReturnJSON checkRecord() throws IOException{
         PbsRecordWithBLOBs record = JSONUtil.parseObject(getParameter("record") ,PbsRecordWithBLOBs.class);
         int rsl = pbsRecordMapper.updateCheckInfo(record);
@@ -210,6 +238,12 @@ public class RecordsController extends BaseController {
     @ResponseBody
     @Transactional
     @PostMapping("/deleteRecord")
+    @ApiOperation(value = "deleteRecord",
+            notes = "删除记录"
+    )
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="header",name="recId",dataType="String",required=true,value="记录编号",defaultValue="")
+    })
     public ReturnJSON deleteRecord() {
         int recId =  Integer.parseInt(getHeader("recId"));
         int rsl = pbsRecordMapper.deleteByPrimaryKey(recId);

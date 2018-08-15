@@ -13,6 +13,9 @@ import com.szga.xinghuo.api.base.util.MethodEnum;
 import com.szga.xinghuo.api.base.util.XhHashMap;
 import com.szga.xinghuo.api.request.BaseZuulServiceRequest;
 import com.szga.xinghuo.api.response.BaseZuulServiceResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,6 +29,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/common")
+@Api(value = "/common", description ="CommonController相关api")
 public class CommonController extends BaseController {
 
     @Autowired
@@ -37,6 +41,8 @@ public class CommonController extends BaseController {
     @RequestMapping("/getInitInfo")
     @CrossOrigin
     @Transactional
+    @ApiOperation(value="/getInitInfo", notes="获取系统参数")
+    @ApiImplicitParams({})
     public ReturnJSON getInitInfo() {
             InitInfoBean rsl = new InitInfoBean();
             InitInfoBean.LoginUserInfo userBean = new InitInfoBean.LoginUserInfo();

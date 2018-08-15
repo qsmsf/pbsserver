@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.servlet.MultipartConfigElement;
 
@@ -23,6 +24,7 @@ import javax.servlet.MultipartConfigElement;
 @EnableTransactionManagement
 @EnableCircuitBreaker
 @EnableAsync
+@EnableSwagger2
 public class ApplicationMain extends SpringBootServletInitializer {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());

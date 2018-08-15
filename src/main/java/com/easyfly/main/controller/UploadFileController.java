@@ -18,6 +18,10 @@ import com.szga.xinghuo.api.base.util.XhHashMap;
 import com.szga.xinghuo.api.domain.BaseUpoladFileBean;
 import com.szga.xinghuo.api.request.BaseUploadFileRequest;
 import com.szga.xinghuo.api.response.BaseUpoladFileResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +37,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/uploadFiles")
+@Api(value = "/uploadFiles", description = "uploadFiles Controller")//必须
 public class UploadFileController extends BaseController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -45,6 +50,12 @@ public class UploadFileController extends BaseController {
     @CrossOrigin
     @ResponseBody
     @RequestMapping("/getRecordFileList")
+    @ApiOperation(value = "getRecordFileList",
+            notes = "获得记录相关文件信息"
+    )
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="header",name="uuid",dataType="String",required=true,value="记录内部uuid",defaultValue="")
+    })
     @Transactional
     public ReturnJSON getRecordFileList(){
         String uuid = getHeader("uuid");
@@ -59,6 +70,12 @@ public class UploadFileController extends BaseController {
     @CrossOrigin
     @ResponseBody
     @RequestMapping("/getFileInfo")
+    @ApiOperation(value = "getFileInfo",
+            notes = "获得文件信息"
+    )
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="query",name="param",dataType="String",required=true,value="文件编号",defaultValue="")
+    })
     @Transactional
     public ReturnJSON getFileInfo() {
         int fileId =  Integer.parseInt(getParam());
@@ -71,6 +88,12 @@ public class UploadFileController extends BaseController {
     @ResponseBody
     @Transactional
     @PostMapping("/addFileInfo")
+    @ApiOperation(value = "addFileInfo",
+            notes = "添加文件信息"
+    )
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="body",name="fileInfo",dataType="String",required=true,value="文件信息json字符串",defaultValue="")
+    })
     public ReturnJSON addFileInfo() {
         SysUploadFile file = JSONUtil.parseObject(getParameter("fileInfo"),SysUploadFile.class);
         int rsl = sysUploadFileMapper.insertSelective(file);
@@ -84,6 +107,12 @@ public class UploadFileController extends BaseController {
     @CrossOrigin
     @Transactional
     @GetMapping("/downloadFile")
+    @ApiOperation(value = "downloadFile",
+            notes = "下载文件"
+    )
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="query",name="fileName",dataType="String",required=true,value="文件名",defaultValue="")
+    })
     public void downloadFile(String fileName, HttpServletResponse response) {
         ServletContext context = request.getServletContext();
         String filePath = context.getRealPath("/") + "/data/" + fileName;
@@ -113,6 +142,13 @@ public class UploadFileController extends BaseController {
     @ResponseBody
     @Transactional
     @PostMapping("/uploadFile")
+    @ApiOperation(value = "uploadFile",
+            notes = "上传文件"
+    )
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="header",name="uuid",dataType="String",required=true,value="记录内部uuid",defaultValue=""),
+            @ApiImplicitParam(paramType="body",name="file",dataType="file",required=true,value="文件流",defaultValue="")
+    })
     public ReturnJSON uploadFile() throws Exception {
         String uuid = getHeader("uuid");
         if (uuid.equals("")) {
@@ -187,6 +223,12 @@ public class UploadFileController extends BaseController {
     @ResponseBody
     @Transactional
     @PostMapping("/updateFileInfo")
+    @ApiOperation(value = "updateFileInfo",
+            notes = "更新文件信息"
+    )
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="header",name="file",dataType="String",required=true,value="文件信息json字符串",defaultValue="")
+    })
     public ReturnJSON updateFileInfo() {
         SysUploadFile file = getHeaderInJSON(SysUploadFile.class, "file");
         int rsl = sysUploadFileMapper.updateByPrimaryKeySelective(file);
@@ -198,6 +240,12 @@ public class UploadFileController extends BaseController {
     @ResponseBody
     @Transactional
     @PostMapping("/deleteFileInfo")
+    @ApiOperation(value = "deleteFileInfo",
+            notes = "删除文件信息"
+    )
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType="header",name="fileId",dataType="String",required=true,value="文件信息编号",defaultValue="")
+    })
     public ReturnJSON deleteFileInfo() {
         int fileId =  Integer.parseInt(getHeader("fileId"));
         int rsl = sysUploadFileMapper.deleteByPrimaryKey(fileId);
