@@ -10,7 +10,10 @@ import com.easyfly.main.util.CodeMsg;
 import com.easyfly.main.util.JSONUtil;
 import com.easyfly.main.util.OfficeUtil;
 import com.easyfly.main.util.ReturnJSON;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,13 +99,13 @@ public class RecordsController extends BaseController {
     @CrossOrigin
     @ResponseBody
     @RequestMapping("/getRecordDetail")
-    @Transactional
     @ApiOperation(value = "getRecordDetail",
             notes = "获取记录详情"
     )
     @ApiImplicitParams({
             @ApiImplicitParam(paramType="header",name="recId",dataType="String",required=true,value="记录编号",defaultValue="")
     })
+    @Transactional
     public ReturnJSON getRecord() {
         int recId =  Integer.parseInt(getHeader("recId"));
         PbsRecord pr = pbsRecordMapper.selectByPrimaryKey(recId);
@@ -225,7 +228,7 @@ public class RecordsController extends BaseController {
         PbsRecordWithBLOBs record = JSONUtil.parseObject(getParameter("record") ,PbsRecordWithBLOBs.class);
         int rsl = pbsRecordMapper.updateCheckInfo(record);
         if(rsl != 1){
-            logger.error("更新失败 :  ="+record.getUuid());
+            logger.error("审核失败 :  ="+record.getUuid());
             return setReturnJson(CodeMsg.C704_MSG, CodeMsg.C704);
         }
         if(record.getRecState() == 1004){

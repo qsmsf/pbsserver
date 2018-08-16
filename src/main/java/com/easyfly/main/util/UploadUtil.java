@@ -1,5 +1,6 @@
 package com.easyfly.main.util;
 
+import com.easyfly.main.bean.XhUploadFileResponse;
 import com.szga.xinghuo.api.base.ApiException;
 import com.szga.xinghuo.api.base.DefaultXHClient;
 import com.szga.xinghuo.api.base.XhClient;
@@ -19,7 +20,7 @@ import java.util.Map;
 public class UploadUtil {
     private final static Logger logger = LoggerFactory.getLogger("UploadUtil");
 
-    public static BaseUpoladFileBean uploadToXh(String fileName, File file){
+    public static XhUploadFileResponse uploadToXh(String fileName, File file){
 
         XhClient client = new DefaultXHClient();
         BaseUploadFileRequest request = new BaseUploadFileRequest();
@@ -39,11 +40,13 @@ public class UploadUtil {
         request.setParamMap(params);
         List<File> list = new ArrayList<File>();
         list.add(file);
+        request.setFileList(list);
         try {
             // 开始调用接口
             BaseUpoladFileResponse response = client.execute(request, System.currentTimeMillis());
             logger.debug(response.getBody().toString());
-            return response.getBaseUpoladFileBean();
+            XhUploadFileResponse rsl = JSONUtil.parseObject(response.getBody().toString(),XhUploadFileResponse.class);
+            return rsl;
 
         } catch (ApiException e) {
             logger.debug(e.getErrCode() +  " : " + e.getErrMsg());

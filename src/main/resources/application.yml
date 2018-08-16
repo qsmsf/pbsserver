@@ -49,4 +49,4 @@ management:
     enabled: false
 
 myProps:
-  debugMode: true
+  debugMode: false

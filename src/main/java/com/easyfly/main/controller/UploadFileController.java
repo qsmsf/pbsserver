@@ -5,6 +5,7 @@ import com.easyfly.main.base.controller.BaseController;
 import com.easyfly.main.bean.MyProps;
 import com.easyfly.main.bean.SysUploadFile;
 import com.easyfly.main.bean.UploadFileResultBean;
+import com.easyfly.main.bean.XhUploadFileResponse;
 import com.easyfly.main.dao.SysUploadFileMapper;
 import com.easyfly.main.util.CodeMsg;
 import com.easyfly.main.util.JSONUtil;
@@ -198,9 +199,10 @@ public class UploadFileController extends BaseController {
         }
         //本地测试
         else {
-            BaseUpoladFileBean resp = UploadUtil.uploadToXh(newFileName + fileExtType, file);
-            if(resp.getSuccess()){
-                List<UploadFileResultBean> rslList = JSON.parseArray(resp.getResult(), UploadFileResultBean.class);
+            XhUploadFileResponse resp = UploadUtil.uploadToXh(newFileName + fileExtType, file);
+            if(resp.getCode() == 200){
+                //List<UploadFileResultBean> rslList = JSON.parseArray(resp.getResult(), UploadFileResultBean.class);
+                List<UploadFileResultBean> rslList = resp.getResult();
                 if(rslList.size() > 0){
                     fileInfo.setFileUrl(rslList.get(0).getData().getFileUrl());
                     fileInfo.setThumbnailUrl(rslList.get(0).getData().getFileUrl());

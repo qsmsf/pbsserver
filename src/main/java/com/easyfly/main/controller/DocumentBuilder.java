@@ -785,9 +785,9 @@ public class DocumentBuilder {
             if (!myProps.getDebugMode()){
 
                 File resultFile = new File(downloadPath);
-                BaseUpoladFileBean resp = UploadUtil.uploadToXh(rec.getUuid(), resultFile);
-                if(resp.getSuccess()){
-                    List<UploadFileResultBean> rslList = JSON.parseArray(resp.getResult(), UploadFileResultBean.class);
+                XhUploadFileResponse resp = UploadUtil.uploadToXh(rec.getUuid(), resultFile);
+                if(resp.getCode() == 200){
+                    List<UploadFileResultBean> rslList = resp.getResult();
                     if(rslList.size() > 0){
                         rec.setDocUrl(rslList.get(0).getData().getFileUrl());
                     }else{
@@ -795,7 +795,7 @@ public class DocumentBuilder {
                         return 1;
                     }
                 }else{
-                    logger.error("upload file error msg: " + resp.getMessage());
+                    logger.error("upload file error msg: " + resp.getMsg());
                     return 2;
                 }
             }else{
